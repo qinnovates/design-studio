@@ -1,6 +1,16 @@
 import type { ASTNode, StyleDeclaration } from '../ast/ASTNode';
 import type { GeneratorOutput, Generator } from '../pipeline/ExportPipeline';
 
+/** Escape a string for safe use in JSX attribute or text context */
+function escapeJSX(value: unknown): string {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /** Map component IDs to React element names */
 const COMPONENT_MAP: Record<string, string> = {
   button: 'button',
@@ -93,39 +103,39 @@ function renderNode(node: ASTNode, indent: number): string {
 
   // Handle specific component props
   if (node.componentId === 'button' && node.props['text']) {
-    const children = String(node.props['text']);
+    const children = escapeJSX(node.props['text']);
     return `${pad}<${tag} ${attrs.join(' ')}>${children}</${tag}>`;
   }
 
   if (node.componentId === 'text-input') {
-    attrs.push(`type="${node.props['inputType'] ?? 'text'}"`);
-    if (node.props['placeholder']) attrs.push(`placeholder="${node.props['placeholder']}"`);
+    attrs.push(`type="${escapeJSX(node.props['inputType'] ?? 'text')}"`);
+    if (node.props['placeholder']) attrs.push(`placeholder="${escapeJSX(node.props['placeholder'])}"`);
     if (node.props['label']) {
-      return `${pad}<label>\n${pad}  ${node.props['label']}\n${pad}  <${tag} ${attrs.join(' ')} />\n${pad}</label>`;
+      return `${pad}<label>\n${pad}  ${escapeJSX(node.props['label'])}\n${pad}  <${tag} ${attrs.join(' ')} />\n${pad}</label>`;
     }
     return `${pad}<${tag} ${attrs.join(' ')} />`;
   }
 
   if (node.componentId === 'image') {
-    attrs.push(`src="${node.props['src'] ?? ''}"`);
-    attrs.push(`alt="${node.props['alt'] ?? ''}"`);
+    attrs.push(`src="${escapeJSX(node.props['src'])}"`);
+    attrs.push(`alt="${escapeJSX(node.props['alt'])}"`);
     return `${pad}<${tag} ${attrs.join(' ')} />`;
   }
 
   if (node.componentId === 'heading') {
     const level = node.props['level'] ?? 'h2';
-    const content = String(node.props['content'] ?? '');
+    const content = escapeJSX(node.props['content']);
     return `${pad}<${level} ${attrs.join(' ')}>${content}</${level}>`;
   }
 
   if (node.componentId === 'text') {
-    const content = String(node.props['content'] ?? '');
+    const content = escapeJSX(node.props['content']);
     return `${pad}<${tag} ${attrs.join(' ')}>${content}</${tag}>`;
   }
 
   // Accessibility attributes
-  if (node.accessibility.role) attrs.push(`role="${node.accessibility.role}"`);
-  if (node.accessibility.label) attrs.push(`aria-label="${node.accessibility.label}"`);
+  if (node.accessibility.role) attrs.push(`role="${escapeJSX(node.accessibility.role)}"`);
+  if (node.accessibility.label) attrs.push(`aria-label="${escapeJSX(node.accessibility.label)}"`);
 
   if (node.children.length === 0) {
     return `${pad}<${tag} ${attrs.join(' ')} />`;

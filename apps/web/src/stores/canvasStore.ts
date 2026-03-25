@@ -160,7 +160,7 @@ export const useCanvasStore = create<CanvasState>()(
           if (!node) continue;
           const newId = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
           const clone: SceneNode = {
-            ...JSON.parse(JSON.stringify(node)),
+            ...structuredClone(node),
             id: newId,
             name: `${node.name} copy`,
             x: node.x + 20,
