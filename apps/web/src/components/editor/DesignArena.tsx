@@ -286,6 +286,19 @@ function ArenaMode() {
         </div>
       )}
 
+      {/* Preview Mode Banner */}
+      {!isGenerating && (
+        <div className="mx-6 mt-4 px-3 py-2 bg-yellow-500/10 border border-yellow-500/30 rounded-lg flex items-center gap-2">
+          <span className="text-yellow-500 text-sm">⚠</span>
+          <div>
+            <span className="text-yellow-300 text-xs font-medium">Preview Mode</span>
+            <span className="text-yellow-400/70 text-[10px] ml-2">
+              Connect an AI provider in Settings to get real design analysis
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Variation cards */}
       {!isGenerating && (
         <div className="p-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">

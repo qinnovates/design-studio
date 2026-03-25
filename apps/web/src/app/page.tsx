@@ -71,17 +71,17 @@ export default function HomePage() {
           Scaffold, design, get AI feedback, pass quality gates, analyze market readiness, and export code — from a single pane of glass. At scale.
         </p>
         <div className="flex gap-3 justify-center">
-          <button className="bg-[var(--accent)] text-white px-6 py-3 rounded-lg font-medium hover:opacity-90">
+          <a href="#templates" className="bg-[var(--accent)] text-white px-6 py-3 rounded-lg font-medium hover:opacity-90">
             Start from Template
-          </button>
-          <button className="border px-6 py-3 rounded-lg font-medium hover:bg-gray-50">
+          </a>
+          <Link href="/editor/blank" className="border px-6 py-3 rounded-lg font-medium hover:bg-gray-50">
             Blank Canvas
-          </button>
+          </Link>
         </div>
       </section>
 
       {/* Template Gallery */}
-      <section className="px-8 pb-16 max-w-6xl mx-auto">
+      <section id="templates" className="px-8 pb-16 max-w-6xl mx-auto">
         <h3 className="text-lg font-semibold mb-6">Start from a template</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {templates.map((template) => (

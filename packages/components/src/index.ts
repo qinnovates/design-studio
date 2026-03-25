@@ -46,6 +46,14 @@ const builtInComponents = [
   AlertDefinition,
 ];
 
-for (const def of builtInComponents) {
-  ComponentRegistry.register(def);
+/** Call once at app startup to register all built-in components */
+export function registerBuiltInComponents(): void {
+  for (const def of builtInComponents) {
+    if (!ComponentRegistry.has(def.id)) {
+      ComponentRegistry.register(def);
+    }
+  }
 }
+
+// Auto-register for backwards compatibility (remove when all consumers call registerBuiltInComponents explicitly)
+registerBuiltInComponents();

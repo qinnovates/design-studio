@@ -185,15 +185,10 @@ export function DesignCanvas() {
 
         {/* Main scene */}
         <Layer>
-          {sceneGraph.rootIds.map((nodeId) => {
-            const node = sceneGraph.nodes[nodeId];
-            if (!node) return null;
-            return (
+          {sceneGraph.rootIds.map((nodeId) => (
               <NodeRenderer
                 key={nodeId}
-                node={node}
-                sceneGraph={sceneGraph}
-                isSelected={selectedNodeIds.includes(nodeId)}
+                nodeId={nodeId}
                 onSelect={(id, append) => selectNodes([id], append)}
                 onHover={setHoveredNode}
                 onDragStart={() => setDragging(true, nodeId)}
@@ -206,8 +201,7 @@ export function DesignCanvas() {
                   }
                 }}
               />
-            );
-          })}
+          ))}
         </Layer>
 
         {/* Selection handles */}

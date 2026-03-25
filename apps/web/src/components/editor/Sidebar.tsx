@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { ComponentRegistry } from '@design-studio/components';
+import { useCanvasStore } from '@/stores/canvasStore';
 
 interface SidebarProps {
   panel: 'components' | 'layers';
@@ -79,6 +80,25 @@ export function Sidebar({ panel, onClose }: SidebarProps) {
                       onDragStart={(e) => {
                         e.dataTransfer.setData('application/design-studio-component', comp.id);
                         e.dataTransfer.effectAllowed = 'copy';
+                      }}
+                      onClick={() => {
+                        const { createComponentNode } = require('@design-studio/canvas');
+                        const canvas = useCanvasStore.getState();
+                        const def = ComponentRegistry.get(comp.id);
+                        if (!def) return;
+                        const node = createComponentNode(comp.id, comp.name, {
+                          x: 200 + Math.random() * 400,
+                          y: 200 + Math.random() * 400,
+                          width: def.defaultSize.width,
+                          height: def.defaultSize.height,
+                        });
+                        for (const prop of def.props) {
+                          if (prop.defaultValue !== undefined && prop.defaultValue !== null) {
+                            node.props[prop.name] = prop.defaultValue;
+                          }
+                        }
+                        node.tokenBindings = { ...def.defaultTokens };
+                        canvas.addNodeToScene(node);
                       }}
                     >
                       <span className="text-gray-400 text-xs w-5">{comp.icon.slice(0, 2)}</span>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, use } from 'react';
+import { useEffect, use, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Sidebar } from '@/components/editor/Sidebar';
 import { Inspector } from '@/components/editor/Inspector';
@@ -76,6 +76,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
   } = useUIStore();
 
   const loadSceneGraph = useCanvasStore((s) => s.loadSceneGraph);
+  const [showWelcome, setShowWelcome] = useState(true);
 
   // Initialize on mount
   useEffect(() => {
@@ -212,6 +213,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
             ].map(({ panel, label, side }) => (
               <button
                 key={panel}
+                aria-pressed={leftPanel === panel}
                 onClick={() => toggleLeftPanel(panel)}
                 className={`text-[10px] px-2 py-1 rounded ${
                   leftPanel === panel
@@ -239,6 +241,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
             ].map(({ panel, label }) => (
               <button
                 key={panel}
+                aria-pressed={rightPanel === panel}
                 onClick={() => toggleRightPanel(panel)}
                 className={`text-[10px] px-2 py-1 rounded ${
                   rightPanel === panel
@@ -253,7 +256,34 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
           </div>
 
           {/* Main view */}
-          <div className="flex-1">
+          <div className="flex-1 relative">
+            {showWelcome && activeView === 'canvas' && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/10 z-50" onClick={() => setShowWelcome(false)}>
+                <div className="bg-white rounded-xl shadow-2xl p-6 max-w-sm text-center" onClick={(e) => e.stopPropagation()}>
+                  <h3 className="text-lg font-semibold mb-2">Your app is ready to design</h3>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Drag components from the left, or let AI design for you.
+                  </p>
+                  <div className="flex gap-2 justify-center">
+                    <button
+                      onClick={() => { setShowWelcome(false); useUIStore.getState().setLeftPanel('components'); }}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
+                    >
+                      Browse Components
+                    </button>
+                    <button
+                      onClick={() => { setShowWelcome(false); useUIStore.getState().setRightPanel('ai'); }}
+                      className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+                    >
+                      Try AI Assistant
+                    </button>
+                  </div>
+                  <button onClick={() => setShowWelcome(false)} className="text-xs text-gray-400 mt-3 hover:text-gray-600">
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            )}
             {renderMainContent()}
           </div>
         </div>

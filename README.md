@@ -1,5 +1,9 @@
 # Launchable
 
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/qinnovates/design-studio/pulls)
+
 ### Need tighter visibility, control, and integration of your builds — at scale?
 
 **Launchable** is an open-source build orchestration platform. Scaffold apps, design visually, get AI-powered feedback, pass quality gates, analyze market readiness, and export production code — all from a single pane of glass.
@@ -206,12 +210,35 @@ Covers 6 categories: **Fintech, Health, SaaS, E-Commerce, Social, Education**.
 
 ---
 
+## Use Cases
+
+**Indie hacker shipping a SaaS MVP**
+Scaffold a dashboard app → customize the design → run Quorum review (Aria catches contrast issues, Mina simplifies the nav) → pass quality gates → export React + Tailwind → ship to Vercel.
+
+**Design team replacing Figma-to-dev handoff**
+Design in the visual canvas → collect team feedback with structured voting → enforce accessibility gates before export → generate production code with design tokens baked in. No more "does the dev build match the mockup?"
+
+**Agency pitching a client**
+Pick the client's industry category → scaffold the app → run Market Intelligence to benchmark against competitors → present the competitive analysis alongside the prototype. Data-backed design decisions, not opinions.
+
+**Open source maintainer building a contributor portal**
+Scaffold the app structure → document every design decision with inline notes → set up quality gates so PRs can't merge without accessibility checks → export components that match the design system exactly.
+
+---
+
 ## Quick Start
 
 ```bash
 git clone https://github.com/qinnovates/design-studio.git
 cd design-studio
 pnpm install
+
+# Optional: start database for save/load
+docker compose up -d
+pnpm db:generate
+pnpm db:push
+
+# Start dev server
 pnpm dev
 # → http://localhost:3000
 ```
@@ -277,12 +304,12 @@ Next.js 15, React 19, Konva.js, Zustand, Yjs, PostgreSQL, Prisma, Tailwind CSS 4
 
 ### What's Next
 
-- [ ] Wire Quorum + Market Intel to real BYOAI providers
-- [ ] Real-time multiplayer
+- [ ] Real-time multiplayer cursors
 - [ ] SwiftUI / Compose / Flutter export
 - [ ] Figma import
 - [ ] Plugin marketplace
 - [ ] Docker production image
+- [ ] Live demo at launchable.dev
 
 ---
 

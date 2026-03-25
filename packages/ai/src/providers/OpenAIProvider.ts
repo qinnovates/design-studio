@@ -53,17 +53,38 @@ export class OpenAIProvider implements AIProvider {
       }));
     }
 
-    const response = await fetch(`${this.baseUrl}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.apiKey}`,
-      },
-      body: JSON.stringify(body),
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
+
+    let response: Response;
+    try {
+      response = await fetch(`${this.baseUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.apiKey}`,
+        },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      });
+    } catch (err) {
+      clearTimeout(timeout);
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        yield { type: 'error' as const, error: 'Request timed out after 30 seconds' };
+      } else {
+        yield { type: 'error' as const, error: `Network error: ${(err as Error).message}` };
+      }
+      return;
+    }
+    clearTimeout(timeout);
 
     if (!response.ok) {
-      yield { type: 'error', error: `OpenAI API error: ${response.status} ${response.statusText}` };
+      let detail = response.statusText;
+      try {
+        const errBody = await response.json();
+        detail = errBody.error?.message ?? detail;
+      } catch { /* non-JSON error body */ }
+      yield { type: 'error', error: `OpenAI API error ${response.status}: ${detail}` };
       return;
     }
 

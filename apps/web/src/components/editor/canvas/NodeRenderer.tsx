@@ -1,33 +1,34 @@
 'use client';
 
+import { memo, useCallback } from 'react';
 import { Group, Rect, Text, Circle } from 'react-konva';
 import type Konva from 'konva';
-import type { SceneNode, SceneGraph } from '@design-studio/canvas';
+import type { SceneNode } from '@design-studio/canvas';
+import { useCanvasStore } from '@/stores/canvasStore';
 import { useTokenStore } from '@/stores/tokenStore';
 import { ComponentRegistry } from '@design-studio/components';
 
 interface NodeRendererProps {
-  node: SceneNode;
-  sceneGraph: SceneGraph;
-  isSelected: boolean;
+  nodeId: string;
   onSelect: (id: string, append: boolean) => void;
   onHover: (id: string | null) => void;
   onDragStart: () => void;
   onDragEnd: (id: string, x: number, y: number) => void;
 }
 
-export function NodeRenderer({
-  node,
-  sceneGraph,
-  isSelected,
+export const NodeRenderer = memo(function NodeRenderer({
+  nodeId,
   onSelect,
   onHover,
   onDragStart,
   onDragEnd,
 }: NodeRendererProps) {
+  // Subscribe to only THIS node's data
+  const node = useCanvasStore((s) => s.sceneGraph.nodes[nodeId]);
+  const isSelected = useCanvasStore((s) => s.selectedNodeIds.includes(nodeId));
   const resolveToken = useTokenStore((s) => s.getResolvedValue);
 
-  if (!node.visible) return null;
+  if (!node || !node.visible) return null;
 
   const resolveColor = (value: string | null | undefined): string => {
     if (!value) return 'transparent';
@@ -58,24 +59,18 @@ export function NodeRenderer({
     },
   };
 
-  // Render children recursively
+  // Render children recursively — each child is its own memoized NodeRenderer
   const renderChildren = () =>
-    node.children.map((childId) => {
-      const child = sceneGraph.nodes[childId];
-      if (!child) return null;
-      return (
-        <NodeRenderer
-          key={childId}
-          node={child}
-          sceneGraph={sceneGraph}
-          isSelected={false}
-          onSelect={onSelect}
-          onHover={onHover}
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-        />
-      );
-    });
+    node.children.map((childId) => (
+      <NodeRenderer
+        key={childId}
+        nodeId={childId}
+        onSelect={onSelect}
+        onHover={onHover}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+      />
+    ));
 
   switch (node.type) {
     case 'frame':
@@ -89,7 +84,6 @@ export function NodeRenderer({
             stroke={isSelected ? '#2563eb' : '#e5e7eb'}
             strokeWidth={isSelected ? 2 : 1}
           />
-          {/* Frame label */}
           <Text
             text={node.name}
             x={0}
@@ -150,13 +144,7 @@ export function NodeRenderer({
       return (
         <Group {...commonProps}>
           {isSelected && (
-            <Rect
-              width={node.width}
-              height={node.height}
-              stroke="#2563eb"
-              strokeWidth={1}
-              dash={[4, 4]}
-            />
+            <Rect width={node.width} height={node.height} stroke="#2563eb" strokeWidth={1} dash={[4, 4]} />
           )}
           <Text
             text={node.content}
@@ -189,7 +177,6 @@ export function NodeRenderer({
           </Group>
         );
       }
-      // Default: rectangle
       return (
         <Group {...commonProps}>
           <Rect
@@ -206,7 +193,6 @@ export function NodeRenderer({
     }
 
     case 'image':
-      // Image placeholder (actual image loading requires useImage hook)
       return (
         <Group {...commonProps}>
           <Rect
@@ -233,13 +219,7 @@ export function NodeRenderer({
       return (
         <Group {...commonProps}>
           {isSelected && (
-            <Rect
-              width={node.width}
-              height={node.height}
-              stroke="#2563eb"
-              strokeWidth={1}
-              dash={[6, 3]}
-            />
+            <Rect width={node.width} height={node.height} stroke="#2563eb" strokeWidth={1} dash={[6, 3]} />
           )}
           {renderChildren()}
         </Group>
@@ -248,4 +228,4 @@ export function NodeRenderer({
     default:
       return null;
   }
-}
+});
