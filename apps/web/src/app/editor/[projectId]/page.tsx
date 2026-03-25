@@ -21,10 +21,12 @@ import { DesignArena } from '@/components/editor/DesignArena';
 import { PipelineStatus } from '@/components/editor/PipelineStatus';
 import { MarketIntel } from '@/components/editor/MarketIntel';
 import { BrandBrief } from '@/components/editor/BrandBrief';
+import { FeatureTracker } from '@/components/editor/FeatureTracker';
 import { useProjectStore } from '@/stores/projectStore';
 import { useCanvasStore } from '@/stores/canvasStore';
 import { useTokenStore } from '@/stores/tokenStore';
 import { useUIStore } from '@/stores/uiStore';
+import { useFeedbackStore } from '@/stores/feedbackStore';
 import { TEMPLATE_SCENES } from '@/templates';
 
 // Konva must be loaded client-side only (no SSR)
@@ -97,6 +99,14 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
     if (sceneFactory) {
       loadSceneGraph(sceneFactory());
     }
+
+    // Auto-register screens as feedback targets
+    const registerTargets = useFeedbackStore.getState().registerScreenTargets;
+    const currentManifest = useProjectStore.getState().manifest;
+    if (currentManifest) {
+      const screenList = Object.values(currentManifest.screens).map((s) => ({ id: s.id, name: s.name }));
+      registerTargets(screenList);
+    }
   }, []);
 
   // Render left panel
@@ -140,6 +150,8 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
         return <MarketIntel onClose={() => setRightPanel(null)} />;
       case 'brand-brief':
         return <BrandBrief onClose={() => setRightPanel(null)} />;
+      case 'features':
+        return <FeatureTracker onClose={() => setRightPanel(null)} />;
       default:
         return null;
     }
@@ -236,6 +248,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
               { panel: 'a11y' as const, label: 'Accessibility' },
               { panel: 'versions' as const, label: 'History' },
               { panel: 'plugins' as const, label: 'Plugins' },
+              { panel: 'features' as const, label: 'Features' },
               { panel: 'brand-brief' as const, label: 'Brand Brief' },
               { panel: 'market-intel' as const, label: 'Market Intel' },
             ].map(({ panel, label }) => (

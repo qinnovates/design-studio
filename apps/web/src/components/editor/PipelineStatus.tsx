@@ -20,6 +20,7 @@ export function PipelineStatus() {
   const getScreenStage = useSwarmStore((s) => s.getScreenStage);
   const advanceScreen = useSwarmStore((s) => s.advanceScreen);
   const getSummary = useFeedbackStore((s) => s.getSummary);
+  const getBlockingComments = useFeedbackStore((s) => s.getBlockingComments);
   const getTasksByScreen = usePMStore((s) => s.getTasksByScreen);
 
   const currentStage = activeScreenId ? getScreenStage(activeScreenId) : 'draft';
@@ -28,6 +29,7 @@ export function PipelineStatus() {
     if (!activeScreenId) return null;
 
     const feedbackSummary = getSummary(`screen-${activeScreenId}`);
+    const blockingComments = getBlockingComments(`screen-${activeScreenId}`);
     const tasks = getTasksByScreen(activeScreenId);
     const openUrgent = tasks.filter((t) => t.priority === 'urgent' && t.status !== 'done');
     const openTasks = tasks.filter((t) => t.status !== 'done');
@@ -37,7 +39,7 @@ export function PipelineStatus() {
       a11yScore: 85, // Would come from real a11y check
       feedbackScore: feedbackSummary?.score ?? 0,
       commentCount: feedbackSummary?.commentCount ?? 0,
-      unresolvedBlockingComments: 0,
+      unresolvedBlockingComments: blockingComments.length,
       approvalCount: feedbackSummary?.likes ?? 0,
       requiredApprovals: 2,
       openUrgentTasks: openUrgent.length,
@@ -46,7 +48,7 @@ export function PipelineStatus() {
     };
 
     return checkPipelineGates(currentStage, context);
-  }, [activeScreenId, currentStage, sceneGraph, getSummary, getTasksByScreen]);
+  }, [activeScreenId, currentStage, sceneGraph, getSummary, getBlockingComments, getTasksByScreen]);
 
   if (!activeScreenId) return null;
 

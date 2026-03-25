@@ -39,6 +39,8 @@ export interface FeedbackComment {
   content: string;
   /** Optional status tag */
   status: 'open' | 'resolved' | 'wontfix' | null;
+  /** If true, this comment blocks pipeline advancement */
+  blocking: boolean;
   parentId: string | null;
   createdAt: string;
   updatedAt: string;
@@ -79,6 +81,8 @@ interface FeedbackState {
   resolveComment: (commentId: string) => void;
   getCommentsForTarget: (targetId: string) => FeedbackComment[];
   getThreadReplies: (parentId: string) => FeedbackComment[];
+  markAsBlocking: (commentId: string, blocking: boolean) => void;
+  getBlockingComments: (targetId: string) => FeedbackComment[];
 
   // Aggregation
   getSummary: (targetId: string) => FeedbackSummary | null;
@@ -167,6 +171,7 @@ export const useFeedbackStore = create<FeedbackState>()((set, get) => ({
           userName,
           content,
           status: null,
+          blocking: false,
           parentId,
           createdAt: now,
           updatedAt: now,
@@ -210,6 +215,16 @@ export const useFeedbackStore = create<FeedbackState>()((set, get) => ({
     return Object.values(get().comments)
       .filter((c) => c.parentId === parentId)
       .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  },
+
+  markAsBlocking: (commentId, blocking) => {
+    get().updateComment(commentId, { blocking });
+  },
+
+  getBlockingComments: (targetId) => {
+    return Object.values(get().comments).filter(
+      (c) => c.targetId === targetId && c.blocking && c.status !== 'resolved',
+    );
   },
 
   // ── Aggregation ──────────────────────────
