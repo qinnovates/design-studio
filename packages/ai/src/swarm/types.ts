@@ -8,6 +8,14 @@ export interface DesignPersona {
   styleKeywords: string[];
   density: 'compact' | 'balanced' | 'spacious';
   colorTemperature: 'warm' | 'neutral' | 'cool';
+  /** Whether this is a built-in or user-created persona */
+  source: 'built-in' | 'custom';
+  /** Historical figure this persona is inspired by (for built-ins) */
+  inspiredBy?: string;
+  /** Era of the historical figure */
+  inspiredByEra?: string;
+  /** Why this figure was chosen */
+  inspiredByReason?: string;
 }
 
 // ─── Critique & Scoring ──────────────────────────────────────

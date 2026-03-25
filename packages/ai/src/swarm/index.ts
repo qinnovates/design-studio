@@ -9,7 +9,8 @@ export type {
   SwarmSession,
 } from './types';
 
-export { DESIGN_PERSONAS } from './personas';
+export { DESIGN_PERSONAS, createCustomPersona, getAllPersonas, PERSONA_INSPIRATIONS } from './personas';
+export type { CreatePersonaOptions } from './personas';
 
 export {
   createSwarmSession,
