@@ -17,3 +17,22 @@ export {
   calculateCritiqueScore,
   rankVariations,
 } from './session';
+
+// Quorum-style iterative refinement
+export type {
+  RefinementStep,
+  RefinementFocus,
+  ComponentChange,
+  DesignScore,
+  QuorumSession,
+} from './QuorumRefiner';
+
+export {
+  determineReviewOrder,
+  buildRefinementPrompt,
+  createQuorumSession,
+  createRefinementStep,
+  calculateOverall,
+  calculateTotalImprovement,
+  getQuorumAttribution,
+} from './QuorumRefiner';

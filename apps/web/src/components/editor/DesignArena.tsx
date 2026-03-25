@@ -5,6 +5,7 @@ import { useSwarmStore } from '@/stores/swarmStore';
 import { useCanvasStore } from '@/stores/canvasStore';
 import { useTokenStore } from '@/stores/tokenStore';
 import { useUIStore } from '@/stores/uiStore';
+import { QuorumRefiner } from './QuorumRefiner';
 import {
   DESIGN_PERSONAS,
   type DesignVariation,
@@ -13,6 +14,58 @@ import {
 } from '@design-studio/ai';
 
 export function DesignArena() {
+  const [mode, setMode] = useState<'quorum' | 'arena'>('quorum');
+
+  // Quorum mode (default) — iterative, one persona at a time
+  if (mode === 'quorum') {
+    return (
+      <div className="w-full h-full flex flex-col">
+        <ModeToggle mode={mode} setMode={setMode} />
+        <div className="flex-1"><QuorumRefiner /></div>
+      </div>
+    );
+  }
+
+  // Arena mode — parallel generation
+  return (
+    <div className="w-full h-full flex flex-col">
+      <ModeToggle mode={mode} setMode={setMode} />
+      <div className="flex-1"><ArenaMode /></div>
+    </div>
+  );
+}
+
+function ModeToggle({ mode, setMode }: { mode: 'quorum' | 'arena'; setMode: (m: 'quorum' | 'arena') => void }) {
+  return (
+    <div className="h-10 bg-gray-900 border-b border-gray-800 flex items-center px-4 gap-2 flex-shrink-0">
+      <button
+        onClick={() => setMode('quorum')}
+        className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
+          mode === 'quorum' ? 'bg-purple-600 text-white' : 'text-gray-400 hover:text-gray-200'
+        }`}
+        aria-pressed={mode === 'quorum'}
+        aria-label="Quorum mode — iterative refinement"
+      >
+        ◎ Quorum — Iterative
+      </button>
+      <button
+        onClick={() => setMode('arena')}
+        className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
+          mode === 'arena' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-gray-200'
+        }`}
+        aria-pressed={mode === 'arena'}
+        aria-label="Arena mode — parallel variations"
+      >
+        ◆ Arena — Parallel
+      </button>
+      <span className="text-[9px] text-gray-600 ml-2">
+        {mode === 'quorum' ? 'Each AI persona improves the design step by step' : 'All personas generate variations simultaneously'}
+      </span>
+    </div>
+  );
+}
+
+function ArenaMode() {
   const {
     session,
     isGenerating,

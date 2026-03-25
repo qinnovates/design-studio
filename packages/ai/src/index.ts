@@ -52,6 +52,24 @@ export {
   rankVariations,
 } from './swarm';
 
+// Quorum — iterative design refinement
+export type {
+  RefinementStep,
+  RefinementFocus,
+  ComponentChange,
+  DesignScore,
+  QuorumSession,
+} from './swarm/QuorumRefiner';
+export {
+  determineReviewOrder,
+  buildRefinementPrompt,
+  createQuorumSession,
+  createRefinementStep,
+  calculateOverall,
+  calculateTotalImprovement,
+  getQuorumAttribution,
+} from './swarm/QuorumRefiner';
+
 // Pipeline — CI/CD stages and gates for design screens
 export type {
   PipelineStage,
