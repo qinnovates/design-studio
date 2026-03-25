@@ -22,6 +22,8 @@ import { PipelineStatus } from '@/components/editor/PipelineStatus';
 import { MarketIntel } from '@/components/editor/MarketIntel';
 import { BrandBrief } from '@/components/editor/BrandBrief';
 import { FeatureTracker } from '@/components/editor/FeatureTracker';
+import { FeatureBoard } from '@/components/editor/FeatureBoard';
+import { GuardrailsPanel } from '@/components/editor/GuardrailsPanel';
 import { useProjectStore } from '@/stores/projectStore';
 import { useCanvasStore } from '@/stores/canvasStore';
 import { useTokenStore } from '@/stores/tokenStore';
@@ -152,6 +154,8 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
         return <BrandBrief onClose={() => setRightPanel(null)} />;
       case 'features':
         return <FeatureTracker onClose={() => setRightPanel(null)} />;
+      case 'guardrails':
+        return <GuardrailsPanel onClose={() => setRightPanel(null)} />;
       default:
         return null;
     }
@@ -166,6 +170,8 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
         return <CommandCenter />;
       case 'design-arena':
         return <DesignArena />;
+      case 'feature-board':
+        return <FeatureBoard />;
       case 'canvas':
       default:
         return (
@@ -197,6 +203,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
               { id: 'app-map' as const, label: 'App Map' },
               { id: 'command-center' as const, label: 'Command Center' },
               { id: 'design-arena' as const, label: 'Design Arena' },
+              { id: 'feature-board' as const, label: 'Feature Board' },
             ].map((view) => (
               <button
                 key={view.id}
@@ -250,6 +257,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
               { panel: 'plugins' as const, label: 'Plugins' },
               { panel: 'features' as const, label: 'Features' },
               { panel: 'brand-brief' as const, label: 'Brand Brief' },
+              { panel: 'guardrails' as const, label: 'Guardrails' },
               { panel: 'market-intel' as const, label: 'Market Intel' },
             ].map(({ panel, label }) => (
               <button

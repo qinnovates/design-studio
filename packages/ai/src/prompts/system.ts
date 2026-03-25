@@ -2,7 +2,7 @@ import type { SceneGraph, SceneNode } from '@design-studio/canvas';
 import { ComponentRegistry } from '@design-studio/components';
 
 /** Build the system prompt for the design AI assistant */
-export function buildSystemPrompt(sceneContext?: string): string {
+export function buildSystemPrompt(sceneContext?: string, guardrailsContext?: string): string {
   const components = ComponentRegistry.getAll();
   const componentList = components
     .map((c) => `- ${c.id}: ${c.description} [variants: ${c.variants.map((v) => v.name).join(', ')}]`)
@@ -31,7 +31,8 @@ GUIDELINES:
 6. Keep layouts clean with consistent spacing.
 7. When adding multiple elements, group them logically (e.g., a form has a container, label, inputs, button).
 
-${sceneContext ? `\nCURRENT CANVAS:\n${sceneContext}` : ''}`;
+${sceneContext ? `\nCURRENT CANVAS:\n${sceneContext}` : ''}
+${guardrailsContext ?? ''}`;
 }
 
 /** Serialize the scene graph into a text description for the AI */

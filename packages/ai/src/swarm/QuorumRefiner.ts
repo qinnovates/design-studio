@@ -160,6 +160,7 @@ export function buildRefinementPrompt(
   userPrompt: string,
   currentDesignDescription: string,
   previousSteps: RefinementStep[],
+  guardrailsContext?: string,
 ): string {
   const previousChangesText = previousSteps.length > 0
     ? `\nPrevious improvements:\n${previousSteps.map((s, i) =>
@@ -188,7 +189,7 @@ Rules:
 4. Be specific — give exact values (hex codes, pixel sizes, font names).
 5. Score the design before and after your change (1-10 on aesthetics, usability, accessibility, consistency).
 6. If the design is already excellent from your perspective, say so and skip (confidence: 0).
-
+${guardrailsContext ?? ''}
 Return JSON:
 {
   "focus": "color-harmony|typography|spacing|visual-hierarchy|accessibility|consistency|emotional-tone|component-choice|simplification|emphasis",
