@@ -20,6 +20,7 @@ import CommandCenter from '@/components/editor/CommandCenter';
 import { DesignArena } from '@/components/editor/DesignArena';
 import { PipelineStatus } from '@/components/editor/PipelineStatus';
 import { MarketIntel } from '@/components/editor/MarketIntel';
+import { BrandBrief } from '@/components/editor/BrandBrief';
 import { useProjectStore } from '@/stores/projectStore';
 import { useCanvasStore } from '@/stores/canvasStore';
 import { useTokenStore } from '@/stores/tokenStore';
@@ -136,6 +137,8 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
         return <NotesPanel onClose={() => setRightPanel(null)} />;
       case 'market-intel':
         return <MarketIntel onClose={() => setRightPanel(null)} />;
+      case 'brand-brief':
+        return <BrandBrief onClose={() => setRightPanel(null)} />;
       default:
         return null;
     }
@@ -231,6 +234,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
               { panel: 'a11y' as const, label: 'Accessibility' },
               { panel: 'versions' as const, label: 'History' },
               { panel: 'plugins' as const, label: 'Plugins' },
+              { panel: 'brand-brief' as const, label: 'Brand Brief' },
               { panel: 'market-intel' as const, label: 'Market Intel' },
             ].map(({ panel, label }) => (
               <button
