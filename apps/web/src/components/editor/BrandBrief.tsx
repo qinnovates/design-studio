@@ -167,6 +167,10 @@ export function BrandBrief({ onClose }: BrandBriefProps) {
           <>
             <Field label="Logo URL" value={brief.logoUrl} onChange={(v) => setBriefField('logoUrl', v)} placeholder="https://..." />
             <Field label="App Icon URL" value={brief.iconUrl} onChange={(v) => setBriefField('iconUrl', v)} placeholder="https://..." />
+            <Field label="Favicon URL (16x16 or 32x32)" value={brief.faviconUrl} onChange={(v) => setBriefField('faviconUrl', v)} placeholder="https://..." />
+            <Field label="App Icon URL (512x512)" value={brief.appIconUrl} onChange={(v) => setBriefField('appIconUrl', v)} placeholder="https://..." />
+            <Field label="Social Share Image (1200x630)" value={brief.ogImageUrl} onChange={(v) => setBriefField('ogImageUrl', v)} placeholder="https://..." />
+            <Field label="Apple Touch Icon (180x180)" value={brief.appleTouchIconUrl} onChange={(v) => setBriefField('appleTouchIconUrl', v)} placeholder="https://..." />
             <Field label="Brand Guidelines URL" value={brief.brandGuidelinesUrl} onChange={(v) => setBriefField('brandGuidelinesUrl', v)} placeholder="https://..." />
           </>
         )}

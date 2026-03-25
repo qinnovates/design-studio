@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@design-studio/canvas": "workspace:*",
+    "@design-studio/components": "workspace:*",
     "@design-studio/tokens": "workspace:*"
   },
   "devDependencies": {

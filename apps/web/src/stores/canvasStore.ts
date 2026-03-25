@@ -136,12 +136,22 @@ export const useCanvasStore = create<CanvasState>()(
 
     updateNodeProps: (nodeId, updates) => {
       set((state) => {
+        state.undoStack.push(structuredClone(state.sceneGraph));
+        if (state.undoStack.length > 50) state.undoStack.shift();
+        state.redoStack = [];
+        state.canUndo = true;
+        state.canRedo = false;
         state.sceneGraph = updateNode(state.sceneGraph, nodeId, updates);
       });
     },
 
     moveNodes: (nodeIds, dx, dy) => {
       set((state) => {
+        state.undoStack.push(structuredClone(state.sceneGraph));
+        if (state.undoStack.length > 50) state.undoStack.shift();
+        state.redoStack = [];
+        state.canUndo = true;
+        state.canRedo = false;
         for (const id of nodeIds) {
           state.sceneGraph = moveNode(state.sceneGraph, id, dx, dy);
         }

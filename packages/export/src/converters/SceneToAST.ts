@@ -1,6 +1,7 @@
 import type { SceneGraph, SceneNode, ComponentNode, TextNode } from '@design-studio/canvas';
 import type { ASTNode, StyleDeclaration } from '../ast/ASTNode';
 import { createRootNode, createComponentASTNode } from '../ast/ASTNode';
+import { ComponentRegistry } from '@design-studio/components';
 
 /** Convert a scene graph to the platform-neutral AST */
 export function sceneToAST(graph: SceneGraph): ASTNode {
@@ -21,13 +22,30 @@ function convertNode(node: SceneNode, graph: SceneGraph): ASTNode {
   const styles = tokenBindingsToStyles(node.tokenBindings);
 
   switch (node.type) {
-    case 'component':
+    case 'component': {
+      // Look up component definition for variant overrides
+      let variantStyles: StyleDeclaration[] = [];
+      try {
+        const def = ComponentRegistry.get(node.componentId);
+        if (def && node.variant) {
+          const variantDef = def.variants.find((v: any) => v.name === node.variant);
+          if (variantDef) {
+            variantStyles = Object.entries(variantDef.tokenOverrides).map(([prop, val]) => ({
+              property: prop,
+              value: val as string,
+              isToken: (val as string).startsWith('{'),
+            }));
+          }
+        }
+      } catch { /* ComponentRegistry not available */ }
+
       return createComponentASTNode(
         node.componentId,
         { ...node.props, variant: node.variant },
-        styles,
+        [...styles, ...variantStyles],
         children,
       );
+    }
 
     case 'text':
       return {

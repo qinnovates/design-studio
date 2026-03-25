@@ -66,6 +66,14 @@ export interface BrandBrief {
   iconUrl: string;
   /** Any existing brand guidelines URL */
   brandGuidelinesUrl: string;
+  /** Favicon URL (16x16 or 32x32) */
+  faviconUrl: string;
+  /** App icon URL (512x512 for PWA/app stores) */
+  appIconUrl: string;
+  /** Social share image (1200x630 for OG tags) */
+  ogImageUrl: string;
+  /** Apple touch icon (180x180) */
+  appleTouchIconUrl: string;
 
   // ── Meta ────────────────────────────────────
   completedSections: string[];
@@ -130,6 +138,10 @@ const DEFAULT_BRIEF: BrandBrief = {
   logoUrl: '',
   iconUrl: '',
   brandGuidelinesUrl: '',
+  faviconUrl: '',
+  appIconUrl: '',
+  ogImageUrl: '',
+  appleTouchIconUrl: '',
   completedSections: [],
   completionPercent: 0,
   createdAt: new Date().toISOString(),
@@ -145,7 +157,7 @@ const SECTIONS: { id: string; label: string; fields: (keyof BrandBrief)[] }[] = 
   { id: 'tone', label: 'Tone & Voice', fields: ['voiceTone', 'sampleCopy'] },
   { id: 'technical', label: 'Technical', fields: ['platforms', 'requiresAuth', 'hasDarkMode', 'languages', 'accessibilityRequirements'] },
   { id: 'business', label: 'Business', fields: ['monetization', 'launchDate', 'mvpFeatures'] },
-  { id: 'assets', label: 'Assets', fields: ['logoUrl', 'iconUrl', 'brandGuidelinesUrl'] },
+  { id: 'assets', label: 'Assets', fields: ['logoUrl', 'iconUrl', 'faviconUrl', 'appIconUrl', 'ogImageUrl', 'appleTouchIconUrl', 'brandGuidelinesUrl'] },
 ];
 
 export { SECTIONS as BRAND_SECTIONS };
