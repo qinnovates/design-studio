@@ -1,4 +1,5 @@
 import type { AIProvider, ChatParams, ChatChunk, ModelInfo, CostEstimate, ProviderConfig } from './ProviderInterface';
+import { validateBaseUrl } from './urlValidation';
 
 const OPENAI_MODELS: ModelInfo[] = [
   { id: 'gpt-4o', name: 'GPT-4o', contextWindow: 128000, supportsTools: true, supportsVision: true, costPer1kInput: 0.0025, costPer1kOutput: 0.01 },
@@ -20,6 +21,9 @@ export class OpenAIProvider implements AIProvider {
     this.apiKey = config.apiKey;
     this.baseUrl = config.baseUrl ?? 'https://api.openai.com/v1';
     this.modelId = config.modelId ?? 'gpt-4o-mini';
+
+    const validation = validateBaseUrl(this.baseUrl);
+    if (!validation.valid) throw new Error(validation.warning ?? 'Invalid base URL');
   }
 
   async *chat(params: ChatParams): AsyncIterable<ChatChunk> {
@@ -75,7 +79,7 @@ export class OpenAIProvider implements AIProvider {
             toolCall: {
               id: tc.id,
               name: tc.function.name,
-              arguments: JSON.parse(tc.function.arguments),
+              arguments: (() => { try { return JSON.parse(tc.function.arguments); } catch { return {}; } })(),
             },
           };
         }

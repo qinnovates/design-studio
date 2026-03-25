@@ -61,24 +61,26 @@ export function AISettings({ onClose }: AISettingsProps) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={onClose}>
-      <div className="bg-white rounded-xl shadow-2xl w-[480px] max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white rounded-xl shadow-2xl w-[480px] max-h-[90vh] overflow-y-auto" role="dialog" aria-modal="true" aria-label="AI Settings" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="px-6 py-4 border-b flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold">AI Settings</h2>
             <p className="text-xs text-gray-500">Bring Your Own AI — your key, your cost</p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl" aria-label="Close settings">&times;</button>
         </div>
 
         <div className="p-6 space-y-5">
           {/* Provider selector */}
           <div>
             <label className="text-sm font-medium mb-2 block">Provider</label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Select AI provider">
               {PROVIDERS.map((p) => (
                 <button
                   key={p.id}
+                  role="radio"
+                  aria-checked={provider === p.id}
                   onClick={() => { setProvider(p.id); setModelId(''); setApiKey(''); setBaseUrl(''); }}
                   className={`text-sm px-3 py-2.5 rounded-lg border text-left ${
                     provider === p.id
@@ -101,6 +103,7 @@ export function AISettings({ onClose }: AISettingsProps) {
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
                 placeholder={selectedProvider.placeholder}
+                aria-label="API Key"
                 className="w-full text-sm px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <p className="text-[10px] text-gray-400 mt-1">Stored locally in your browser. Never sent to our servers.</p>
@@ -118,6 +121,7 @@ export function AISettings({ onClose }: AISettingsProps) {
                 value={baseUrl}
                 onChange={(e) => setBaseUrl(e.target.value)}
                 placeholder={provider === 'ollama' ? 'http://localhost:11434' : 'https://openrouter.ai/api/v1'}
+                aria-label="Base URL"
                 className="w-full text-sm px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -129,6 +133,7 @@ export function AISettings({ onClose }: AISettingsProps) {
             <select
               value={modelId || selectedProvider.models[0]}
               onChange={(e) => setModelId(e.target.value)}
+              aria-label="Model"
               className="w-full text-sm px-3 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {selectedProvider.models.map((m) => (

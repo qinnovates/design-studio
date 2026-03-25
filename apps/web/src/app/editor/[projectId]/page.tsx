@@ -154,18 +154,21 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
       {/* Main editor area */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left sidebar */}
-        {renderLeftPanel()}
+        {leftPanel && <div role="complementary" aria-label="Left panel">{renderLeftPanel()}</div>}
 
         {/* Main content area */}
-        <div className="flex-1 relative bg-gray-100 flex flex-col">
+        <div className="flex-1 relative bg-gray-100 flex flex-col" role="main" aria-label="Design canvas">
           {/* View tabs */}
           <div className="h-9 bg-white border-b flex items-center px-3 gap-1 flex-shrink-0">
+            <div role="tablist" aria-label="Editor views" className="flex items-center gap-1">
             {[
               { id: 'canvas' as const, label: 'Canvas' },
               { id: 'app-map' as const, label: 'App Map' },
             ].map((view) => (
               <button
                 key={view.id}
+                role="tab"
+                aria-selected={activeView === view.id}
                 onClick={() => useUIStore.getState().setActiveView(view.id)}
                 className={`text-xs px-3 py-1.5 rounded ${
                   activeView === view.id
@@ -176,10 +179,12 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
                 {view.label}
               </button>
             ))}
+            </div>
 
             <div className="flex-1" />
 
             {/* Quick toggles */}
+            <div role="toolbar" aria-label="Panel toggles" className="flex items-center gap-1">
             {[
               { panel: 'components' as const, label: 'Components', side: 'left' as const },
               { panel: 'screens' as const, label: 'Screens', side: 'left' as const },
@@ -204,9 +209,9 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
               { panel: 'inspector' as const, label: 'Inspector' },
               { panel: 'ai' as const, label: 'AI' },
               { panel: 'fonts' as const, label: 'Fonts' },
-              { panel: 'tokens' as const, label: 'Tokens' },
+              { panel: 'tokens' as const, label: 'Theme' },
               { panel: 'export' as const, label: 'Export' },
-              { panel: 'a11y' as const, label: 'A11y' },
+              { panel: 'a11y' as const, label: 'Accessibility' },
               { panel: 'versions' as const, label: 'History' },
               { panel: 'plugins' as const, label: 'Plugins' },
             ].map(({ panel, label }) => (
@@ -222,6 +227,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
                 {label}
               </button>
             ))}
+            </div>
           </div>
 
           {/* Main view */}
@@ -231,7 +237,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
         </div>
 
         {/* Right panel */}
-        {renderRightPanel()}
+        {rightPanel && <div role="complementary" aria-label="Right panel">{renderRightPanel()}</div>}
       </div>
     </div>
   );

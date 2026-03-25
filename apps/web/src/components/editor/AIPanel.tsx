@@ -21,6 +21,7 @@ import {
   removeNode,
 } from '@design-studio/canvas';
 import { AISettings } from './AISettings';
+import { validateToolCall } from '@/lib/toolValidation';
 
 interface AIPanelProps {
   onClose: () => void;
@@ -47,75 +48,77 @@ function getOrCreateProvider(): AIProvider | null {
 }
 
 function processToolCall(name: string, args: Record<string, unknown>): string {
+  const validation = validateToolCall(name, args);
+  if (!validation.valid) {
+    return `Tool call rejected: ${validation.error}`;
+  }
+  const validArgs = validation.data;
+
   const canvas = useCanvasStore.getState();
   const tokens = useTokenStore.getState();
 
   switch (name) {
     case 'add_component': {
       const node = createComponentNode(
-        args.componentId as string,
-        (args.name as string) || 'Component',
+        validArgs.componentId,
+        validArgs.name || 'Component',
         {
-          x: (args.x as number) || 0,
-          y: (args.y as number) || 0,
-          width: (args.width as number) || 200,
-          height: (args.height as number) || 48,
-          variant: (args.variant as string) || 'default',
-          props: (args.props as Record<string, unknown>) || {},
+          x: validArgs.x || 0,
+          y: validArgs.y || 0,
+          width: validArgs.width || 200,
+          height: validArgs.height || 48,
+          variant: validArgs.variant || 'default',
+          props: validArgs.props || {},
         },
       );
       canvas.addNodeToScene(node);
-      return `Added ${args.componentId} "${args.name}" at (${args.x}, ${args.y})`;
+      return `Added ${validArgs.componentId} "${validArgs.name}" at (${validArgs.x}, ${validArgs.y})`;
     }
     case 'add_text': {
       const node = createTextNode(
-        (args.content as string) || 'Text',
+        validArgs.content || 'Text',
         {
-          x: (args.x as number) || 0,
-          y: (args.y as number) || 0,
-          width: (args.width as number) || 200,
+          x: validArgs.x || 0,
+          y: validArgs.y || 0,
+          width: validArgs.width || 200,
           height: 32,
-          fontSize: (args.fontSize as number) || 16,
-          fontWeight: (args.fontWeight as number) || 400,
-          textAlign: (args.textAlign as 'left' | 'center' | 'right') || 'left',
+          fontSize: validArgs.fontSize || 16,
+          fontWeight: validArgs.fontWeight || 400,
+          textAlign: validArgs.textAlign || 'left',
         },
       );
       canvas.addNodeToScene(node);
-      return `Added text "${(args.content as string)?.slice(0, 30)}" at (${args.x}, ${args.y})`;
+      return `Added text "${validArgs.content?.slice(0, 30)}" at (${validArgs.x}, ${validArgs.y})`;
     }
     case 'add_frame': {
       const node = createFrameNode(
-        (args.name as string) || 'Frame',
+        validArgs.name || 'Frame',
         {
-          x: (args.x as number) || 0,
-          y: (args.y as number) || 0,
-          width: (args.width as number) || 400,
-          height: (args.height as number) || 300,
-          fill: (args.fill as string) || null,
+          x: validArgs.x || 0,
+          y: validArgs.y || 0,
+          width: validArgs.width || 400,
+          height: validArgs.height || 300,
+          fill: validArgs.fill || null,
         },
       );
       canvas.addNodeToScene(node);
-      return `Added frame "${args.name}" at (${args.x}, ${args.y}) ${args.width}x${args.height}`;
+      return `Added frame "${validArgs.name}" at (${validArgs.x}, ${validArgs.y}) ${validArgs.width}x${validArgs.height}`;
     }
     case 'modify_element': {
-      const nodeId = args.nodeId as string;
-      const updates = args.updates as Record<string, unknown>;
-      canvas.updateNodeProps(nodeId, updates);
-      return `Modified element ${nodeId}`;
+      canvas.updateNodeProps(validArgs.nodeId, validArgs.updates);
+      return `Modified element ${validArgs.nodeId}`;
     }
     case 'remove_element': {
-      const nodeId = args.nodeId as string;
-      // Select the node first, then remove via store
-      canvas.selectNodes([nodeId]);
+      canvas.selectNodes([validArgs.nodeId]);
       canvas.removeSelectedNodes();
-      return `Removed element ${nodeId}`;
+      return `Removed element ${validArgs.nodeId}`;
     }
     case 'update_token': {
-      tokens.updateToken(args.tokenName as string, args.value as string);
-      return `Updated token ${args.tokenName} = ${args.value}`;
+      tokens.updateToken(validArgs.tokenName, validArgs.value);
+      return `Updated token ${validArgs.tokenName} = ${validArgs.value}`;
     }
     case 'suggest_layout': {
-      return `Suggestion: ${args.suggestion}\nReason: ${args.reason}`;
+      return `Suggestion: ${validArgs.suggestion}\nReason: ${validArgs.reason}`;
     }
     default:
       return `Unknown tool: ${name}`;
@@ -252,6 +255,7 @@ export function AIPanel({ onClose }: AIPanelProps) {
             onClick={() => setShowSettings(true)}
             className="text-gray-400 hover:text-gray-600 p-1"
             title="AI Settings"
+            aria-label="AI settings"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -263,13 +267,14 @@ export function AIPanel({ onClose }: AIPanelProps) {
               onClick={clearMessages}
               className="text-gray-400 hover:text-gray-600 p-1"
               title="Clear chat"
+              aria-label="Clear conversation"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             </button>
           )}
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1">
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1" aria-label="Close panel">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -278,7 +283,7 @@ export function AIPanel({ onClose }: AIPanelProps) {
       </div>
 
       {/* Messages area */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-3">
+      <div className="flex-1 overflow-y-auto p-3 space-y-3" role="log" aria-label="AI conversation" aria-live="polite">
         {!isConfigured && messages.length === 0 && (
           <div className="text-center py-6">
             <p className="text-sm font-medium mb-1">Design with AI</p>
@@ -371,12 +376,14 @@ export function AIPanel({ onClose }: AIPanelProps) {
             onChange={(e) => setInput(e.target.value)}
             placeholder={isConfigured ? 'Describe what you want...' : 'Configure AI first...'}
             disabled={isStreaming || !isConfigured}
+            aria-label="Message to AI assistant"
             className="flex-1 text-sm px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50 disabled:bg-gray-50"
           />
           <button
             type="submit"
             className="px-3 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 disabled:opacity-50"
             disabled={!input.trim() || isStreaming || !isConfigured}
+            aria-label="Send message"
           >
             {isStreaming ? '...' : 'Send'}
           </button>

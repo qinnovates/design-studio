@@ -1,4 +1,5 @@
 import type { AIProvider, ChatParams, ChatChunk, ModelInfo, CostEstimate, ProviderConfig } from './ProviderInterface';
+import { validateBaseUrl } from './urlValidation';
 
 export class OllamaProvider implements AIProvider {
   id = 'ollama';
@@ -11,6 +12,9 @@ export class OllamaProvider implements AIProvider {
   constructor(config: ProviderConfig) {
     this.baseUrl = config.baseUrl ?? 'http://localhost:11434';
     this.modelId = config.modelId ?? 'llama3.1';
+
+    const validation = validateBaseUrl(this.baseUrl);
+    if (!validation.valid) throw new Error(validation.warning ?? 'Invalid base URL');
   }
 
   async *chat(params: ChatParams): AsyncIterable<ChatChunk> {

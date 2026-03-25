@@ -32,7 +32,7 @@ export function ScreenList({ onClose }: ScreenListProps) {
           >
             + Add
           </button>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg">
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg" aria-label="Close panel">
             &times;
           </button>
         </div>

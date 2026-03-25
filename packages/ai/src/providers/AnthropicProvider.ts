@@ -1,4 +1,5 @@
 import type { AIProvider, ChatParams, ChatChunk, ModelInfo, CostEstimate, ProviderConfig } from './ProviderInterface';
+import { validateBaseUrl } from './urlValidation';
 
 const ANTHROPIC_MODELS: ModelInfo[] = [
   { id: 'claude-sonnet-4-6', name: 'Claude Sonnet 4.6', contextWindow: 200000, supportsTools: true, supportsVision: true, costPer1kInput: 0.003, costPer1kOutput: 0.015 },
@@ -19,6 +20,9 @@ export class AnthropicProvider implements AIProvider {
     this.apiKey = config.apiKey;
     this.baseUrl = config.baseUrl ?? 'https://api.anthropic.com';
     this.modelId = config.modelId ?? 'claude-sonnet-4-6';
+
+    const validation = validateBaseUrl(this.baseUrl);
+    if (!validation.valid) throw new Error(validation.warning ?? 'Invalid base URL');
   }
 
   async *chat(params: ChatParams): AsyncIterable<ChatChunk> {

@@ -31,6 +31,7 @@ function NumberInput({
         min={min}
         max={max}
         step={step}
+        aria-label={label}
         onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
         className="w-full rounded border border-gray-200 bg-gray-50 px-2 py-1 text-xs tabular-nums focus:border-blue-400 focus:outline-none"
       />
@@ -170,13 +171,14 @@ export function Inspector({ onClose }: { onClose: () => void }) {
     <div className="flex w-72 flex-col border-l bg-white">
       <PanelHeader onClose={onClose} />
 
-      <div className="flex-1 space-y-0 overflow-y-auto">
+      <div className="flex-1 space-y-0 overflow-y-auto" role="form" aria-label="Element properties">
         {/* Header */}
         <div className="border-b px-4 py-3">
           <div className="flex items-center gap-2">
             <input
               value={node!.name}
               onChange={(e) => update('name', e.target.value)}
+              aria-label="Element name"
               className="flex-1 rounded border border-transparent bg-transparent px-1 text-sm font-medium hover:border-gray-200 focus:border-blue-400 focus:outline-none"
             />
             <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-500">
@@ -186,6 +188,8 @@ export function Inspector({ onClose }: { onClose: () => void }) {
           <div className="mt-2 flex gap-2">
             <button
               onClick={() => update('locked', !node!.locked)}
+              aria-label="Lock element"
+              aria-pressed={node!.locked}
               className={`rounded px-2 py-0.5 text-[10px] ${
                 node!.locked ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500'
               }`}
@@ -194,6 +198,8 @@ export function Inspector({ onClose }: { onClose: () => void }) {
             </button>
             <button
               onClick={() => update('visible', !node!.visible)}
+              aria-label="Toggle visibility"
+              aria-pressed={node!.visible}
               className={`rounded px-2 py-0.5 text-[10px] ${
                 node!.visible ? 'bg-gray-100 text-gray-500' : 'bg-red-100 text-red-600'
               }`}
@@ -204,7 +210,7 @@ export function Inspector({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Position & Size */}
-        <div className="border-b px-4">
+        <div className="border-b px-4" role="group" aria-label="Position and size">
           <SectionHeader
             title="Position & Size"
             open={openSections.position}
@@ -235,6 +241,7 @@ export function Inspector({ onClose }: { onClose: () => void }) {
                   max={1}
                   step={0.01}
                   value={node!.opacity}
+                  aria-label="Opacity"
                   onChange={(e) => update('opacity', parseFloat(e.target.value))}
                   className="w-full accent-blue-500"
                 />
@@ -278,7 +285,7 @@ export function Inspector({ onClose }: { onClose: () => void }) {
                 </div>
                 <div>
                   <span className="text-[10px] uppercase tracking-wider text-gray-400">Align</span>
-                  <div className="mt-1 flex gap-1">
+                  <div className="mt-1 flex gap-1" role="radiogroup" aria-label="Text alignment">
                     {(['left', 'center', 'right'] as const).map((a) => (
                       <button
                         key={a}
@@ -389,7 +396,7 @@ function PanelHeader({ onClose }: { onClose: () => void }) {
   return (
     <div className="flex items-center justify-between border-b px-4 py-3">
       <span className="text-sm font-medium">Inspector</span>
-      <button onClick={onClose} className="text-lg text-gray-400 hover:text-gray-600">
+      <button onClick={onClose} className="text-lg text-gray-400 hover:text-gray-600" aria-label="Close panel">
         &times;
       </button>
     </div>

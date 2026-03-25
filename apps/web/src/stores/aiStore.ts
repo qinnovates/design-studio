@@ -10,6 +10,9 @@ export interface AIMessage {
 
 export interface AIProviderConfig {
   provider: 'openai' | 'anthropic' | 'ollama' | 'openrouter';
+  // SECURITY: This key is held in memory only. Never persist this store
+  // to localStorage or sessionStorage. The key is sent directly to the
+  // AI provider's API — it never touches our servers.
   apiKey: string;
   baseUrl?: string;
   modelId: string;

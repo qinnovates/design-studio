@@ -234,7 +234,7 @@ export const useCanvasStore = create<CanvasState>()(
     // ── History Actions ────────────────────────
     pushHistory: () => {
       set((state) => {
-        state.undoStack.push(JSON.parse(JSON.stringify(state.sceneGraph)));
+        state.undoStack.push(structuredClone(state.sceneGraph));
         if (state.undoStack.length > 50) state.undoStack.shift();
         state.redoStack = [];
         state.canUndo = true;
@@ -246,7 +246,7 @@ export const useCanvasStore = create<CanvasState>()(
       set((state) => {
         const prev = state.undoStack.pop();
         if (!prev) return;
-        state.redoStack.push(JSON.parse(JSON.stringify(state.sceneGraph)));
+        state.redoStack.push(structuredClone(state.sceneGraph));
         state.sceneGraph = prev;
         state.canUndo = state.undoStack.length > 0;
         state.canRedo = true;
@@ -258,7 +258,7 @@ export const useCanvasStore = create<CanvasState>()(
       set((state) => {
         const next = state.redoStack.pop();
         if (!next) return;
-        state.undoStack.push(JSON.parse(JSON.stringify(state.sceneGraph)));
+        state.undoStack.push(structuredClone(state.sceneGraph));
         state.sceneGraph = next;
         state.canUndo = true;
         state.canRedo = state.redoStack.length > 0;

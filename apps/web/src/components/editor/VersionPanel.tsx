@@ -86,7 +86,7 @@ export function VersionPanel({ onClose }: VersionPanelProps) {
           >
             Save
           </button>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg">&times;</button>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg" aria-label="Close panel">&times;</button>
         </div>
       </div>
 

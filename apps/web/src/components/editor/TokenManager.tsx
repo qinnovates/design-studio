@@ -164,6 +164,7 @@ export function TokenManager({ onClose }: TokenManagerProps) {
         <button
           onClick={onClose}
           className="text-gray-400 hover:text-gray-600 text-lg leading-none"
+          aria-label="Close panel"
         >
           &times;
         </button>

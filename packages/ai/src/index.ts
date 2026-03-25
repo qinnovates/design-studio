@@ -27,5 +27,8 @@ export { classifyTask, type DesignTaskType } from './tasks/TaskRouter';
 // Design tools for function calling
 export { DESIGN_TOOLS } from './functions/designTools';
 
+// URL validation
+export { validateBaseUrl, isLocalhost } from './providers/urlValidation';
+
 // Prompts
 export { buildSystemPrompt, serializeSceneForAI } from './prompts/system';

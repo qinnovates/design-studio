@@ -122,7 +122,7 @@ export function A11yPanel({ onClose }: A11yPanelProps) {
       {/* Header */}
       <div className="px-4 py-3 border-b flex items-center justify-between">
         <span className="text-sm font-medium">Accessibility</span>
-        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg">&times;</button>
+        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg" aria-label="Close panel">&times;</button>
       </div>
 
       {/* Score */}
