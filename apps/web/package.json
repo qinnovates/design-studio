@@ -1,0 +1,43 @@
+{
+  "name": "@design-studio/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@design-studio/a11y": "workspace:*",
+    "@design-studio/ai": "workspace:*",
+    "@design-studio/app": "workspace:*",
+    "@design-studio/canvas": "workspace:*",
+    "@design-studio/collab": "workspace:*",
+    "@design-studio/collab": "workspace:*",
+    "@design-studio/components": "workspace:*",
+    "@design-studio/db": "workspace:*",
+    "@design-studio/export": "workspace:*",
+    "@design-studio/plugins": "workspace:*",
+    "@design-studio/tokens": "workspace:*",
+    "@design-studio/ui": "workspace:*",
+    "immer": "^11.1.4",
+    "konva": "^10.2.3",
+    "lucide-react": "^0.400.0",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-konva": "^19.2.3",
+    "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "postcss": "^8.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.0"
+  }
+}

@@ -1,0 +1,214 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Auth ─────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique
+  name      String?
+  avatarUrl String?  @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  accounts             Account[]
+  teamMemberships      TeamMember[]
+  projectsCreated      Project[]
+  comments             Comment[]
+  versions             Version[]
+  aiProviderKeys       AIProviderKey[]
+  componentDefinitions ComponentDefinition[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(uuid()) @db.Uuid
+  userId            String  @map("user_id") @db.Uuid
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  accessToken       String? @map("access_token")
+  refreshToken      String? @map("refresh_token")
+  expiresAt         Int?    @map("expires_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+// ─── Teams ────────────────────────────────────────────────
+
+model Team {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  members  TeamMember[]
+  projects Project[]
+
+  @@map("teams")
+}
+
+model TeamMember {
+  teamId String @map("team_id") @db.Uuid
+  userId String @map("user_id") @db.Uuid
+  role   String @default("member") // owner | admin | member | viewer
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([teamId, userId])
+  @@map("team_members")
+}
+
+// ─── Projects ─────────────────────────────────────────────
+
+model Project {
+  id          String   @id @default(uuid()) @db.Uuid
+  teamId      String   @map("team_id") @db.Uuid
+  name        String
+  description String?
+  thumbnail   String?
+  createdById String   @map("created_by") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  team      Team       @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  createdBy User       @relation(fields: [createdById], references: [id])
+  pages     Page[]
+  tokenSets TokenSet[]
+  components ComponentDefinition[]
+
+  @@map("projects")
+}
+
+// ─── Pages ────────────────────────────────────────────────
+
+model Page {
+  id         String   @id @default(uuid()) @db.Uuid
+  projectId  String   @map("project_id") @db.Uuid
+  name       String
+  sortOrder  Int      @default(0) @map("sort_order")
+  sceneGraph Json     @default("{}") @map("scene_graph")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  project  Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  comments Comment[]
+  versions Version[]
+
+  @@index([projectId])
+  @@map("pages")
+}
+
+// ─── Design Tokens ────────────────────────────────────────
+
+model TokenSet {
+  id        String   @id @default(uuid()) @db.Uuid
+  projectId String   @map("project_id") @db.Uuid
+  name      String
+  tokens    Json     @default("{}")
+  isActive  Boolean  @default(false) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("token_sets")
+}
+
+// ─── Custom Components ────────────────────────────────────
+
+model ComponentDefinition {
+  id         String   @id @default(uuid()) @db.Uuid
+  projectId  String   @map("project_id") @db.Uuid
+  name       String
+  definition Json
+  createdById String  @map("created_by") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy User    @relation(fields: [createdById], references: [id])
+
+  @@map("component_definitions")
+}
+
+// ─── Comments ─────────────────────────────────────────────
+
+model Comment {
+  id        String   @id @default(uuid()) @db.Uuid
+  pageId    String   @map("page_id") @db.Uuid
+  authorId  String   @map("author_id") @db.Uuid
+  nodeId    String?  @map("node_id")
+  x         Float?
+  y         Float?
+  content   String
+  resolved  Boolean  @default(false)
+  parentId  String?  @map("parent_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  page     Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  author   User      @relation(fields: [authorId], references: [id])
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies  Comment[] @relation("CommentReplies")
+  reactions Reaction[]
+
+  @@index([pageId])
+  @@index([nodeId])
+  @@map("comments")
+}
+
+model Reaction {
+  id        String @id @default(uuid()) @db.Uuid
+  commentId String @map("comment_id") @db.Uuid
+  userId    String @map("user_id") @db.Uuid
+  emoji     String
+
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId, emoji])
+  @@map("reactions")
+}
+
+// ─── Version History ──────────────────────────────────────
+
+model Version {
+  id         String   @id @default(uuid()) @db.Uuid
+  pageId     String   @map("page_id") @db.Uuid
+  name       String?
+  sceneGraph Json     @map("scene_graph")
+  tokens     Json
+  createdById String  @map("created_by") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  page      Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  createdBy User @relation(fields: [createdById], references: [id])
+
+  @@index([pageId, createdAt(sort: Desc)])
+  @@map("versions")
+}
+
+// ─── AI Provider Keys ─────────────────────────────────────
+
+model AIProviderKey {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  provider  String
+  apiKey    String   @map("api_key") // Encrypted at application layer
+  baseUrl   String?  @map("base_url")
+  modelId   String?  @map("model_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, provider])
+  @@map("ai_provider_keys")
+}
