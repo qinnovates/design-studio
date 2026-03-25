@@ -6,7 +6,7 @@ import { immer } from 'zustand/middleware/immer';
 export type LeftPanel = 'components' | 'layers' | 'screens' | 'app-map' | 'notes' | null;
 export type RightPanel = 'inspector' | 'tokens' | 'ai' | 'comments' | 'fonts' | 'export' | 'a11y' | 'versions' | 'plugins' | null;
 export type PreviewMode = 'desktop' | 'tablet' | 'phone' | null;
-export type EditorView = 'canvas' | 'app-map' | 'tokens' | 'export' | 'notes';
+export type EditorView = 'canvas' | 'app-map' | 'command-center' | 'tokens' | 'export' | 'notes';
 
 interface UIState {
   // Panel visibility

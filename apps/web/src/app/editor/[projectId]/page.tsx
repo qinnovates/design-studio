@@ -16,6 +16,7 @@ import { A11yPanel } from '@/components/editor/A11yPanel';
 import { VersionPanel } from '@/components/editor/VersionPanel';
 import { PluginsPanel } from '@/components/editor/PluginsPanel';
 import { PresenceBar } from '@/components/editor/PresenceBar';
+import CommandCenter from '@/components/editor/CommandCenter';
 import { useProjectStore } from '@/stores/projectStore';
 import { useCanvasStore } from '@/stores/canvasStore';
 import { useTokenStore } from '@/stores/tokenStore';
@@ -140,6 +141,8 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
     switch (activeView) {
       case 'app-map':
         return <AppMap />;
+      case 'command-center':
+        return <CommandCenter />;
       case 'canvas':
       default:
         return <DesignCanvas />;
@@ -164,6 +167,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
             {[
               { id: 'canvas' as const, label: 'Canvas' },
               { id: 'app-map' as const, label: 'App Map' },
+              { id: 'command-center' as const, label: 'Command Center' },
             ].map((view) => (
               <button
                 key={view.id}
