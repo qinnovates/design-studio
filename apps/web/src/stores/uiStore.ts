@@ -4,7 +4,7 @@ import { immer } from 'zustand/middleware/immer';
 // ─── Types ───────────────────────────────────────────────────
 
 export type LeftPanel = 'components' | 'layers' | 'screens' | 'app-map' | 'notes' | null;
-export type RightPanel = 'inspector' | 'tokens' | 'ai' | 'comments' | 'fonts' | 'export' | 'a11y' | 'versions' | 'plugins' | 'market-intel' | 'brand-brief' | 'features' | 'guardrails' | null;
+export type RightPanel = 'inspector' | 'tokens' | 'ai' | 'comments' | 'fonts' | 'export' | 'a11y' | 'versions' | 'plugins' | 'market-intel' | 'brand-brief' | 'features' | 'guardrails' | 'brand-intel' | null;
 export type PreviewMode = 'desktop' | 'tablet' | 'phone' | null;
 export type EditorView = 'canvas' | 'app-map' | 'command-center' | 'design-arena' | 'feature-board' | 'tokens' | 'export' | 'notes';
 

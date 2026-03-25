@@ -24,6 +24,7 @@ import { BrandBrief } from '@/components/editor/BrandBrief';
 import { FeatureTracker } from '@/components/editor/FeatureTracker';
 import { FeatureBoard } from '@/components/editor/FeatureBoard';
 import { GuardrailsPanel } from '@/components/editor/GuardrailsPanel';
+import { BrandIntelPanel } from '@/components/editor/BrandIntelPanel';
 import { useProjectStore } from '@/stores/projectStore';
 import { useCanvasStore } from '@/stores/canvasStore';
 import { useTokenStore } from '@/stores/tokenStore';
@@ -156,6 +157,8 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
         return <FeatureTracker onClose={() => setRightPanel(null)} />;
       case 'guardrails':
         return <GuardrailsPanel onClose={() => setRightPanel(null)} />;
+      case 'brand-intel':
+        return <BrandIntelPanel onClose={() => setRightPanel(null)} />;
       default:
         return null;
     }
@@ -259,6 +262,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
               { panel: 'brand-brief' as const, label: 'Brand Brief' },
               { panel: 'guardrails' as const, label: 'Guardrails' },
               { panel: 'market-intel' as const, label: 'Market Intel' },
+              { panel: 'brand-intel' as const, label: 'Brand Test' },
             ].map(({ panel, label }) => (
               <button
                 key={panel}

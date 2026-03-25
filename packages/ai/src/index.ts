@@ -90,6 +90,26 @@ export {
   generateMockAnalysis,
 } from './intelligence';
 
+// Brand Intelligence
+export type {
+  BrandTestRequest,
+  NameAnalysis,
+  NameConflict,
+  TaglineAnalysis,
+  BrandTestReport,
+  GeneratedName,
+  GeneratedTagline,
+  BrandPersona,
+} from './intelligence';
+
+export {
+  BRAND_PERSONAS,
+  buildBrandTestPrompt,
+  generateMockBrandTest,
+  getNameScoreLabel,
+  getNameScoreColor,
+} from './intelligence';
+
 // Pipeline — CI/CD stages and gates for design screens
 export type {
   PipelineStage,
