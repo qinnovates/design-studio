@@ -32,3 +32,37 @@ export { validateBaseUrl, isLocalhost } from './providers/urlValidation';
 
 // Prompts
 export { buildSystemPrompt, serializeSceneForAI } from './prompts/system';
+
+// Swarm — multi-persona design generation + critique
+export type {
+  DesignPersona,
+  CritiqueScores,
+  DesignCritique,
+  VariationStatus,
+  VariationComponent,
+  DesignVariation,
+  SwarmPhase,
+  SwarmSession,
+} from './swarm';
+export {
+  DESIGN_PERSONAS,
+  createSwarmSession,
+  createVariation,
+  calculateCritiqueScore,
+  rankVariations,
+} from './swarm';
+
+// Pipeline — CI/CD stages and gates for design screens
+export type {
+  PipelineStage,
+  PipelineStageInfo,
+  GateResult,
+  Gate,
+  GateContext,
+  PipelineGateCheckResult,
+} from './pipeline';
+export {
+  PIPELINE_STAGES,
+  STAGE_COLORS,
+  checkPipelineGates,
+} from './pipeline';

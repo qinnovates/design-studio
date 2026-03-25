@@ -17,6 +17,8 @@ import { VersionPanel } from '@/components/editor/VersionPanel';
 import { PluginsPanel } from '@/components/editor/PluginsPanel';
 import { PresenceBar } from '@/components/editor/PresenceBar';
 import CommandCenter from '@/components/editor/CommandCenter';
+import { DesignArena } from '@/components/editor/DesignArena';
+import { PipelineStatus } from '@/components/editor/PipelineStatus';
 import { useProjectStore } from '@/stores/projectStore';
 import { useCanvasStore } from '@/stores/canvasStore';
 import { useTokenStore } from '@/stores/tokenStore';
@@ -143,9 +145,16 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
         return <AppMap />;
       case 'command-center':
         return <CommandCenter />;
+      case 'design-arena':
+        return <DesignArena />;
       case 'canvas':
       default:
-        return <DesignCanvas />;
+        return (
+          <>
+            <PipelineStatus />
+            <DesignCanvas />
+          </>
+        );
     }
   };
 
@@ -168,6 +177,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
               { id: 'canvas' as const, label: 'Canvas' },
               { id: 'app-map' as const, label: 'App Map' },
               { id: 'command-center' as const, label: 'Command Center' },
+              { id: 'design-arena' as const, label: 'Design Arena' },
             ].map((view) => (
               <button
                 key={view.id}

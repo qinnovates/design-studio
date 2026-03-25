@@ -1,0 +1,58 @@
+import type { DesignPersona } from './types';
+
+export const DESIGN_PERSONAS: DesignPersona[] = [
+  {
+    id: 'minimalist',
+    name: 'Mina',
+    avatar: '\u{1F5A4}',
+    philosophy: 'Less is more. Every element must earn its place.',
+    styleKeywords: ['clean', 'whitespace', 'restrained', 'elegant'],
+    density: 'spacious',
+    colorTemperature: 'cool',
+  },
+  {
+    id: 'bold',
+    name: 'Blaze',
+    avatar: '\u{1F525}',
+    philosophy: 'Design should command attention and evoke emotion.',
+    styleKeywords: ['vibrant', 'high-contrast', 'dramatic', 'impactful'],
+    density: 'compact',
+    colorTemperature: 'warm',
+  },
+  {
+    id: 'accessible',
+    name: 'Aria',
+    avatar: '\u{267F}',
+    philosophy: 'Design for everyone. Accessibility is not optional.',
+    styleKeywords: ['inclusive', 'readable', 'structured', 'clear'],
+    density: 'balanced',
+    colorTemperature: 'neutral',
+  },
+  {
+    id: 'editorial',
+    name: 'Edith',
+    avatar: '\u{1F4F0}',
+    philosophy: 'Typography tells the story. Let the content breathe.',
+    styleKeywords: ['typographic', 'editorial', 'refined', 'literary'],
+    density: 'spacious',
+    colorTemperature: 'warm',
+  },
+  {
+    id: 'playful',
+    name: 'Pixel',
+    avatar: '\u{1F3A8}',
+    philosophy: 'Design should bring joy and delight to users.',
+    styleKeywords: ['colorful', 'rounded', 'friendly', 'whimsical'],
+    density: 'balanced',
+    colorTemperature: 'warm',
+  },
+  {
+    id: 'brutalist',
+    name: 'Brut',
+    avatar: '\u{1F9F1}',
+    philosophy: 'Raw structure over decoration. Function is beauty.',
+    styleKeywords: ['raw', 'structural', 'monospace', 'grid-heavy'],
+    density: 'compact',
+    colorTemperature: 'cool',
+  },
+];
