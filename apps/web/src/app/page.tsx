@@ -52,7 +52,7 @@ export default function HomePage() {
       <header className="border-b px-8 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-[var(--accent)] rounded-lg" />
-          <h1 className="text-xl font-semibold">Design Studio</h1>
+          <h1 className="text-xl font-semibold">Launchable</h1>
         </div>
         <div className="flex items-center gap-4">
           <button className="text-sm text-gray-500 hover:text-gray-700">Sign In</button>
@@ -65,10 +65,10 @@ export default function HomePage() {
       {/* Hero */}
       <section className="px-8 py-16 max-w-4xl mx-auto text-center">
         <h2 className="text-4xl font-bold tracking-tight mb-4">
-          Design apps without design skills
+          Tighter visibility, control, and integration of your builds
         </h2>
         <p className="text-lg text-gray-500 mb-8 max-w-2xl mx-auto">
-          Pick a template, customize with AI, export real code. Open source. Bring your own AI.
+          Scaffold, design, get AI feedback, pass quality gates, analyze market readiness, and export code — from a single pane of glass. At scale.
         </p>
         <div className="flex gap-3 justify-center">
           <button className="bg-[var(--accent)] text-white px-6 py-3 rounded-lg font-medium hover:opacity-90">

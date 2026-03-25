@@ -70,6 +70,26 @@ export {
   getQuorumAttribution,
 } from './swarm/QuorumRefiner';
 
+// Market Intelligence — competitive analysis + market readiness
+export type {
+  MarketAnalysisRequest,
+  MarketIntelReport,
+  DimensionScore,
+  CompetitiveInsight,
+  UXRecommendation,
+  MarketSignal,
+  MarketImprovement,
+  CategoryBenchmark,
+} from './intelligence';
+
+export {
+  CATEGORY_BENCHMARKS,
+  buildMarketAnalysisPrompt,
+  getScoreLabel,
+  getScoreColor,
+  generateMockAnalysis,
+} from './intelligence';
+
 // Pipeline — CI/CD stages and gates for design screens
 export type {
   PipelineStage,

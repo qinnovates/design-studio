@@ -1,43 +1,95 @@
-# Design Studio
+# Launchable
 
-**Open-source Figma alternative with BYOAI — design apps visually, export real code.**
+### Need tighter visibility, control, and integration of your builds — at scale?
 
-Design Studio is a web-based design tool that makes app building accessible to non-technical users. Start from templates, customize with AI assistance, get team feedback, pass design quality gates, and export production-ready React code.
+**Launchable** is an open-source build orchestration platform. Scaffold apps, design visually, get AI-powered feedback, pass quality gates, analyze market readiness, and export production code — all from a single pane of glass.
 
-## Design Goal
+It's not a design tool. It's not a project manager. It's not an AI chatbot. **It's the mission control for shipping apps.**
 
-**One single pane of glass for your entire app.**
-
-Every component, screen, font, color, spacing value, navigation flow, data model, task, vote, and design decision — visible, editable, and connected in one place. Design Studio orchestrates the build by visualizing all elements together so you can see the whole picture and make informed decisions.
-
-Think of it as **MiroFish + Suno + Figma + Linear** — for app building.
-
-## Key Differentiators
-
-| Feature | Figma | Design Studio |
-|---------|-------|---------------|
-| **Starting point** | Blank canvas | Template with real components |
-| **AI assistance** | None / plugins | BYOAI co-designer with function calling |
-| **AI design generation** | None | Quorum iterative refinement + Arena parallel generation |
-| **Output** | Mockups | Real React code + CSS (gated by quality checks) |
-| **Design system** | Manual | Auto-managed token system with alias chains |
-| **Accessibility** | Manual | Built-in WCAG checker + CI/CD gate |
-| **App awareness** | Per-screen | Full app graph (screens, nav, data models) |
-| **Feedback** | Comments only | Likes/dislikes/comments on any element + approval gates |
-| **Project management** | External | Built-in tasks, milestones, Kanban board |
-| **Design pipeline** | None | CI/CD gates: a11y, feedback, approvals gate export |
-| **Documentation** | External | Inline notes + annotations (IDA Pro-style) |
-| **Command center** | None | Single dashboard showing entire app state |
-| **Cost** | $15-75/mo | Free, open source |
-| **AI vendor** | N/A | BYOAI — your key, your cost |
+```
+Idea → Scaffold → Design → AI Review → Team Feedback → Quality Gates → Market Analysis → Export Code → Ship
+         ↑                                                                                              |
+         └──────────────────────── all visible in one dashboard ────────────────────────────────────────┘
+```
 
 ---
 
-## Quorum Design Refiner (the killer feature)
+## The Problem
 
-Design Studio integrates [Quorum](https://github.com/qinnovates/quorum) for iterative AI design refinement. Instead of dumping N parallel designs, each AI persona reviews the current design and makes **one targeted improvement** — building on the last, converging on quality.
+Building apps today means context-switching between 6+ tools:
 
-### How It Works
+| Tool | What it does | What's missing |
+|------|-------------|----------------|
+| Figma | Design mockups | No code output, no feedback gates, no project tracking |
+| Linear/Jira | Track tasks | Disconnected from the actual design |
+| Slack/email | Collect feedback | Unstructured, no voting, no gates |
+| Storybook | Preview components | No design system management, no AI |
+| GitHub Actions | CI/CD for code | Nothing for design quality |
+| Google Docs | Document decisions | Disconnected from everything |
+
+**You have zero single-pane visibility into what's being built, who approved it, whether it's accessible, whether it's competitive, and whether it's ready to ship.**
+
+## The Solution
+
+Launchable puts everything in one place:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    COMMAND CENTER                            │
+│                                                             │
+│  ┌─ Screens ──┐  ┌─ Tasks ────┐  ┌─ Design System ───────┐ │
+│  │ Home    ✓  │  │ To Do   3  │  │ Colors  ████████████  │ │
+│  │ Login  👍5 │  │ Active  2  │  │ Fonts   Inter + Lora  │ │
+│  │ Dash   👎2 │  │ Review  1  │  │ Spacing ▪▪▪▪▪▪▪▪▪▪▪  │ │
+│  │ Cart    ●  │  │ Done    8  │  │ Theme   ◑ Dark        │ │
+│  └────────────┘  └────────────┘  └────────────────────────┘ │
+│                                                             │
+│  ┌─ Pipeline ─────────────────────────────────────────────┐ │
+│  │ Draft ──→ Review ──→ Approved ──→ Export Ready ──→ 🚀  │ │
+│  │            ✓ Feedback  ✓ A11y ≥80  ✓ No blockers       │ │
+│  └────────────────────────────────────────────────────────┘ │
+│                                                             │
+│  ┌─ Market Intel ─────┐  ┌─ Activity ──────────────────┐   │
+│  │ Score: 74/100      │  │ 2m ago  👍 Alex liked Login  │   │
+│  │ vs. Stripe: -11    │  │ 5m ago  💬 "CTA too small"   │   │
+│  │ "Add trust badges" │  │ 8m ago  ✓ Task completed     │   │
+│  └────────────────────┘  └─────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## What Launchable Does
+
+### 1. Scaffold → full app structure in seconds
+Pick a preset (SaaS, E-Commerce, Social, Dashboard, Health) or describe your app to AI. Launchable generates the complete app structure: screens, navigation flows, data models, and a starter design — ready to customize.
+
+### 2. Design → visual canvas with AI co-designer
+Drag-and-drop components onto a Konva.js canvas. Edit properties, tokens, variants. Or tell the AI: "Add a login form with Google sign-in" and watch it build it live via function calling.
+
+### 3. AI Review → Quorum iterative refinement
+6 AI design personas review your work one at a time, each making a single targeted improvement. Accept or reject each change. The design converges on quality through iteration — not parallel chaos.
+
+### 4. Team Feedback → structured voting on everything
+Like, dislike, or comment on any element — screens, colors, fonts, components, decisions. Feedback feeds directly into quality gates.
+
+### 5. Quality Gates → CI/CD pipeline for design
+Every screen progresses through: **Draft → Review → Approved → Export Ready → Shipped**. Gates enforce: accessibility score, positive feedback, team approvals, no blocking comments, no urgent tasks. You can't export code until the design passes.
+
+### 6. Market Intelligence → competitive analysis
+AI analyzes your design against the competitive landscape. Scores across 7 dimensions: category fit, intuitiveness, professionalism, visual quality, UX patterns, info architecture, conversion readiness. Benchmarked against top apps in your space.
+
+### 7. Export → real code, not mockups
+Scene graph → platform-neutral AST → React + Tailwind code. CSS variables. JSON tokens. Quorum attribution baked in.
+
+### 8. Track → project management built in
+Tasks, milestones, Kanban board — all linked to screens and components. No context-switching to Linear. Everything visible in the Command Center.
+
+---
+
+## Quorum Design Refiner
+
+Launchable integrates [Quorum](https://github.com/qinnovates/quorum) for iterative AI design refinement. Instead of dumping options, each AI persona reviews the current design and makes **one targeted improvement**.
 
 ```
 User: "Professional SaaS pricing page, dark theme, trustworthy but modern"
@@ -92,22 +144,8 @@ User: "Professional SaaS pricing page, dark theme, trustworthy but modern"
   Overall improvement: +2.3 points
 
   "Design refined by Quorum AI — 3 iterative passes by
-   ♿ Aria, ◯ Mina, ✦ Edith. Powered by Design Studio."
+   ♿ Aria, ◯ Mina, ✦ Edith. Powered by Launchable."
 ```
-
-### Why Quorum-Style Beats Parallel Generation
-
-| Parallel (Suno-style) | Iterative (Quorum-style) |
-|------------------------|--------------------------|
-| 6 disconnected visions | One coherent, improving design |
-| Overwhelming choice paralysis | One decision at a time |
-| Can't explain the "why" | Each step explains the rationale |
-| All-or-nothing selection | Accept/reject individual changes |
-| Spreads across options | Converges on quality |
-
-Both modes are available in the Design Arena:
-- **Quorum (default)** — iterative refinement, one persona at a time
-- **Arena** — parallel generation for early exploration
 
 ### The 6 AI Design Personas
 
@@ -120,20 +158,9 @@ Both modes are available in the Design Arena:
 | **Pixel** | ✿ | Delight is a feature | Playful, friendly, colorful |
 | **Brix** | ▦ | Function IS the aesthetic | Brutalist, raw, structural |
 
-### Smart Review Order
-
-The review order is chosen based on your design prompt:
-- **Accessibility always goes first** (foundation)
-- Style persona matched to keywords goes second
-- Remaining personas fill in: typography → impact → delight → structure
-
-Example: "fun health app" → Aria → Pixel → Edith → Blaze → Mina → Brix
-
 ---
 
 ## Design Pipeline (CI/CD for Design)
-
-Every screen progresses through a pipeline. Export is gated — you can't ship code until quality checks pass.
 
 ```
 Draft → Design Review → Approved → Export Ready → Shipped
@@ -146,240 +173,125 @@ Draft → Design Review → Approved → Export Ready → Shipped
   Has components
 ```
 
-### Gate Checks
-
-| Gate | Stage Transition | Required | What It Checks |
-|------|-----------------|----------|----------------|
-| Has Components | Draft → Review | Yes | Screen has at least 1 element |
-| Positive Feedback | Review → Approved | Yes | More likes than dislikes |
-| No Blocking Comments | Review → Approved | Yes | All blocking comments resolved |
-| Team Approvals | Review → Approved | Yes | Required number of approvals met |
-| A11y Score ≥ 80 | Approved → Export | Yes | Accessibility score passes threshold |
-| No Urgent Tasks | Approved → Export | Yes | All urgent tasks for this screen done |
-| AAA Compliance | Approved → Export | Advisory | A11y score ≥ 95 |
-| All Tasks Done | Approved → Export | Advisory | All tasks (not just urgent) complete |
-
-The pipeline status bar appears above the canvas, showing gate pass/fail indicators and an "Advance" button when all required gates pass.
+| Gate | Required | What It Checks |
+|------|----------|----------------|
+| Has Components | Yes | Screen has at least 1 element |
+| Positive Feedback | Yes | More likes than dislikes |
+| No Blocking Comments | Yes | All blocking comments resolved |
+| Team Approvals | Yes | Required number of approvals met |
+| A11y Score ≥ 80 | Yes | Accessibility score passes threshold |
+| No Urgent Tasks | Yes | All urgent tasks for this screen done |
+| Market Readiness ≥ 70 | Advisory | Competitive analysis score |
+| AAA Compliance | Advisory | A11y score ≥ 95 |
 
 ---
 
-## Command Center (Single Pane of Glass)
+## Market Intelligence
 
-The Command Center is a MiroFish-style dashboard showing the entire app at once:
+AI analyzes your design against the competitive landscape:
 
-| Section | What It Shows |
-|---------|--------------|
-| **Project Header** | App name, platform badges, quick stats, task completion progress |
-| **Screen Grid** | All screens as cards with type badges, routes, inline voting |
-| **Task Board** | Kanban columns (To Do / In Progress / Review / Done) |
-| **Component Inventory** | All component types with usage heatmap |
-| **Design System** | Color palette, typography, spacing scale with voting |
-| **Feedback Summary** | Most liked, needs attention, most discussed elements |
-| **Milestones** | Progress bars, due dates, task counts |
-| **Activity Feed** | Recent votes, comments, task changes |
+| Dimension | What It Measures |
+|-----------|-----------------|
+| **Category Fit** | Does it look like it belongs in this space? |
+| **User Intuitiveness** | Will users understand it without instructions? |
+| **Professionalism** | Does it look trustworthy and polished? |
+| **Visual Quality** | Is it visually competitive with top apps? |
+| **UX Patterns** | Does it follow proven patterns for this category? |
+| **Info Architecture** | Is the information structure clear? |
+| **Conversion Ready** | Would users sign up / buy / engage? |
 
-Everything is interactive — vote on colors, add tasks, click screens to navigate to canvas.
+Benchmarked against top apps: Stripe, Linear, Headspace, Shopify, Instagram, Duolingo — depending on your category.
 
----
-
-## Feedback System
-
-Like, dislike, or comment on **any element** in the app:
-
-- **Screens** — vote on screen designs
-- **Components** — vote on individual UI elements
-- **Colors** — vote on color choices
-- **Fonts** — vote on typography selections
-- **Design decisions** — vote on architectural choices
-- **Annotations** — vote on design notes
-
-Feedback aggregates into the Command Center and feeds the Design Pipeline gates.
-
----
-
-## Current Status (v0.2.0)
-
-### What Works
-
-**Design:**
-- Template gallery (6 templates, 5 scaffold presets)
-- Visual canvas (Konva.js — drag/drop, zoom/pan, selection, resize, keyboard shortcuts)
-- 9 component definitions (Button, TextInput, Card, Text, Heading, Image, Container, Navbar, Alert)
-- Design token system (80+ tokens, alias chains, light/dark themes, CSS export)
-- App Map (SVG relationship diagram of screens, nav flows, data models)
-- Font library (15 fonts, 8 pairings, live preview)
-- Property inspector (position, size, props, variants, token bindings)
-- Token manager (color picker, typography scale, spacing, corners, shadows)
-- Responsive preview (iPhone, iPad, Desktop frames)
-
-**AI:**
-- BYOAI (OpenAI, Anthropic, Ollama with streaming + function calling)
-- 7 canvas tools (add component, add text, add frame, modify, remove, update token, suggest)
-- Quorum iterative refinement (6 personas, smart review order, accept/reject per step)
-- Design Arena parallel generation (all personas generate + critique simultaneously)
-- Zod-validated tool call arguments
-
-**Collaboration:**
-- Feedback system (likes/dislikes/comments on any element)
-- Project management (tasks, milestones, Kanban board)
-- Notes & annotations (IDA Pro-style — decisions, requirements, todos, bugs)
-- Version history (save/restore snapshots, auto-save)
-- Yjs CRDT binding + presence indicators
-- Plugin system (sandboxed iframe runtime, 3 example plugins)
-
-**Quality:**
-- Design Pipeline (CI/CD gates for export)
-- Accessibility checker (contrast, touch targets, alt text, WCAG references)
-- Command Center (single-pane-of-glass dashboard)
-
-**Export:**
-- React + Tailwind code generation
-- CSS variables
-- JSON tokens (DTCG-compatible)
-- Quorum attribution in exports
-
-**Security:**
-- BaseUrl allowlist validation (prevents API key exfiltration)
-- Zod schema validation on all AI tool calls
-- Content Security Policy headers
-- Plugin sandbox (allow-scripts only, no allow-same-origin)
-- XSS escaping in export generator
-- No eval, no dangerouslySetInnerHTML, no raw SQL
-
-### What's Next
-
-- [ ] Real-time multiplayer cursors
-- [ ] SwiftUI / Jetpack Compose / Flutter export
-- [ ] Animation / interaction design
-- [ ] Figma import
-- [ ] Plugin marketplace
-- [ ] Wire Quorum personas to real BYOAI providers
-- [ ] Documentation site (Nextra)
-- [ ] Docker production image
+Covers 6 categories: **Fintech, Health, SaaS, E-Commerce, Social, Education**.
 
 ---
 
 ## Quick Start
-
-### Prerequisites
-- Node.js 20+
-- pnpm 9+ (`npm install -g pnpm`)
-- Docker (for PostgreSQL + Redis, optional)
-
-### Setup
 
 ```bash
 git clone https://github.com/qinnovates/design-studio.git
 cd design-studio
 pnpm install
 pnpm dev
-# Open http://localhost:3000
+# → http://localhost:3000
 ```
 
 ### Configure AI (BYOAI)
 
-1. Open the editor → click **AI** panel
-2. Click **Configure AI**
-3. Choose your provider (OpenAI, Anthropic, Ollama)
-4. Enter your API key
-5. Select a model
-6. Start designing: "Add a login form with email and password"
+1. Open the editor → click **AI** panel → **Configure AI**
+2. Choose your provider: OpenAI, Anthropic, or Ollama (local, free)
+3. Enter your API key → Test → Save
+4. Start building: "Add a hero section with a signup form"
 
-Your API key stays in your browser. Never sent to our servers.
-
-### Try the Quorum Refiner
-
-1. Open any project → click **Design Arena** tab
-2. Quorum mode is selected by default
-3. Enter your design intent: "Modern SaaS landing page, dark theme"
-4. Select how many review passes (2-6)
-5. Watch each AI persona improve the design one step at a time
-6. Accept or reject each change
-7. View the final result on canvas
+Your key stays in your browser. Never touches our servers.
 
 ---
 
 ## Architecture
 
+**99 TypeScript source files. 11 packages. 8 Zustand stores. 0 type errors.**
+
 ```
-design-studio/
-├── apps/
-│   └── web/                    # Next.js 15 + React 19 (App Router)
-│       ├── src/
-│       │   ├── app/            # Pages (home, editor)
-│       │   ├── components/     # 20+ editor components
-│       │   │   └── editor/
-│       │   │       ├── canvas/         # Konva renderer (6 files)
-│       │   │       ├── CommandCenter   # Single pane of glass
-│       │   │       ├── DesignArena     # AI swarm + Quorum
-│       │   │       ├── QuorumRefiner   # Iterative refinement UI
-│       │   │       ├── PipelineStatus  # CI/CD gate bar
-│       │   │       └── ...             # Inspector, Toolbar, Panels
-│       │   ├── stores/         # 7 Zustand stores
-│       │   │   ├── canvasStore     # Scene graph, selection, undo
-│       │   │   ├── projectStore    # App manifest, screens, notes
-│       │   │   ├── tokenStore      # Design tokens, theme switching
-│       │   │   ├── uiStore         # Panels, views, overlays
-│       │   │   ├── aiStore         # BYOAI config, chat messages
-│       │   │   ├── feedbackStore   # Votes, comments, summaries
-│       │   │   ├── pmStore         # Tasks, milestones, stats
-│       │   │   └── swarmStore      # AI swarm sessions, pipeline
-│       │   ├── lib/            # Zod validation, utilities
-│       │   └── templates/      # Scene graph factories
-│       └── ...
+launchable/
+├── apps/web/               # Next.js 15 + React 19
+│   ├── components/editor/  # 25+ editor components
+│   │   ├── canvas/         # Konva.js renderer
+│   │   ├── CommandCenter   # Single pane of glass dashboard
+│   │   ├── DesignArena     # AI swarm (Quorum + Arena modes)
+│   │   ├── PipelineStatus  # CI/CD gate status bar
+│   │   ├── MarketIntel     # Competitive analysis panel
+│   │   └── ...             # Inspector, Toolbar, Fonts, Export, A11y, Notes, Versions, Plugins
+│   └── stores/             # 8 Zustand stores (canvas, project, tokens, AI, feedback, PM, swarm, UI)
 ├── packages/
-│   ├── canvas/                 # Scene graph + node types
-│   ├── components/             # 9 UI component definitions
-│   ├── tokens/                 # Token resolver + presets
-│   ├── ai/                     # BYOAI + Quorum + Pipeline
-│   │   ├── providers/          # OpenAI, Anthropic, Ollama
-│   │   ├── swarm/              # Personas, sessions, QuorumRefiner
-│   │   ├── pipeline/           # Stages, gates, checks
-│   │   ├── functions/          # 7 design tool definitions
-│   │   └── prompts/            # System prompts, scene serializer
-│   ├── app/                    # App manifest, scaffolder, fonts
-│   ├── export/                 # AST, React/CSS generators
-│   ├── a11y/                   # WCAG checks (contrast, targets)
-│   ├── collab/                 # Yjs CRDTs, version history
-│   ├── plugins/                # Sandboxed plugin runtime
-│   ├── db/                     # Prisma schema (12 models)
-│   └── ui/                     # Shared utilities
-├── docker-compose.yml
-├── CLAUDE.md                   # AI agent instructions
-└── LICENSE                     # MIT
+│   ├── ai/                 # BYOAI providers + Quorum + Pipeline + Market Intelligence
+│   ├── canvas/             # Scene graph + node types
+│   ├── components/         # 9 UI component definitions
+│   ├── tokens/             # Design token resolver
+│   ├── app/                # App manifest + scaffolder + fonts
+│   ├── export/             # React/CSS code generators
+│   ├── a11y/               # WCAG accessibility checks
+│   ├── collab/             # Yjs CRDTs + version history
+│   ├── plugins/            # Sandboxed iframe plugin runtime
+│   ├── db/                 # Prisma schema (12 models)
+│   └── ui/                 # Shared utilities
+└── docker-compose.yml      # PostgreSQL + Redis
 ```
 
 ### Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | Next.js 15, React 19, App Router |
-| Canvas | Konva.js (react-konva) |
-| State | Zustand (7 stores) |
-| Real-time | Yjs CRDTs |
-| Database | PostgreSQL 16, Prisma 6 |
-| AI | Custom BYOAI (OpenAI, Anthropic, Ollama) |
-| Validation | Zod |
-| Styling | Tailwind CSS 4 |
-| Testing | Vitest, Playwright |
+Next.js 15, React 19, Konva.js, Zustand, Yjs, PostgreSQL, Prisma, Tailwind CSS 4, Zod, BYOAI (OpenAI/Anthropic/Ollama)
 
 ---
 
-## For AI Agents
+## What's Built (v0.2.0)
 
-This repo includes `CLAUDE.md` with full instructions for AI coding agents. Any AI agent can:
+**Orchestration:** Command Center dashboard, Design Pipeline (CI/CD gates), Market Intelligence (7-dimension competitive scoring), project management (tasks, milestones, Kanban), feedback system (votes + comments on any element), version history, activity feed
 
-1. Read `CLAUDE.md` for repo rules and architecture
-2. Run `pnpm typecheck` to validate changes (23 tasks, 0 errors)
-3. Follow the package dependency graph
-4. Use the scene graph API to add features
+**Design:** Visual canvas (drag/drop, zoom/pan, selection, resize), 9 component definitions, 80+ design tokens with alias chains, light/dark themes, app map (screen relationships), font library (15 fonts, 8 pairings), responsive preview, inline annotations
+
+**AI:** BYOAI (OpenAI, Anthropic, Ollama), 7 canvas tools via function calling, Quorum iterative refinement (6 personas), Arena parallel generation, market readiness analysis, Zod-validated tool calls
+
+**Export:** React + Tailwind codegen, CSS variables, JSON tokens, Quorum attribution
+
+**Security:** BaseUrl allowlist, Zod validation, CSP headers, plugin sandbox, XSS escaping
+
+### What's Next
+
+- [ ] Wire Quorum + Market Intel to real BYOAI providers
+- [ ] Real-time multiplayer
+- [ ] SwiftUI / Compose / Flutter export
+- [ ] Figma import
+- [ ] Plugin marketplace
+- [ ] Docker production image
+
+---
 
 ## Contributing
 
-1. Fork the repo
-2. Create a feature branch
-3. Make changes (ensure `pnpm typecheck` passes)
-4. Submit a PR
+```bash
+# Fork → clone → install → branch → code → typecheck → PR
+pnpm typecheck  # must pass (23 tasks, 0 errors)
+```
 
 ## License
 
@@ -387,4 +299,4 @@ MIT — Kevin Qi / [qinnovates](https://github.com/qinnovates)
 
 ---
 
-*Powered by [Quorum](https://github.com/qinnovates/quorum) — multi-persona AI review.*
+*Build orchestration powered by [Quorum](https://github.com/qinnovates/quorum) — iterative multi-persona AI review.*

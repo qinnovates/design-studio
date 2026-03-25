@@ -1,7 +1,7 @@
-# Design Studio — AI Agent Instructions
+# Launchable — AI Agent Instructions
 
 ## What This Is
-Open-source Figma alternative with BYOAI (Bring Your Own AI). Non-technical users design apps visually, AI helps, export real code.
+Open-source build orchestration platform. Scaffold apps, design visually, get AI-powered feedback (Quorum), pass CI/CD quality gates, analyze market readiness, and export production code — from a single pane of glass.
 
 ## Architecture
 Turborepo monorepo with 11 packages under `packages/` and 1 app under `apps/web/`.

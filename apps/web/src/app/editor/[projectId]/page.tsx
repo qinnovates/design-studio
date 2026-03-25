@@ -19,6 +19,7 @@ import { PresenceBar } from '@/components/editor/PresenceBar';
 import CommandCenter from '@/components/editor/CommandCenter';
 import { DesignArena } from '@/components/editor/DesignArena';
 import { PipelineStatus } from '@/components/editor/PipelineStatus';
+import { MarketIntel } from '@/components/editor/MarketIntel';
 import { useProjectStore } from '@/stores/projectStore';
 import { useCanvasStore } from '@/stores/canvasStore';
 import { useTokenStore } from '@/stores/tokenStore';
@@ -133,6 +134,8 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
         return <PluginsPanel onClose={() => setRightPanel(null)} />;
       case 'comments':
         return <NotesPanel onClose={() => setRightPanel(null)} />;
+      case 'market-intel':
+        return <MarketIntel onClose={() => setRightPanel(null)} />;
       default:
         return null;
     }
@@ -228,6 +231,7 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
               { panel: 'a11y' as const, label: 'Accessibility' },
               { panel: 'versions' as const, label: 'History' },
               { panel: 'plugins' as const, label: 'Plugins' },
+              { panel: 'market-intel' as const, label: 'Market Intel' },
             ].map(({ panel, label }) => (
               <button
                 key={panel}

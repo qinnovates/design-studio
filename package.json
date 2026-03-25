@@ -1,8 +1,8 @@
 {
-  "name": "design-studio",
-  "version": "0.1.0",
+  "name": "launchable",
+  "version": "0.2.0",
   "private": true,
-  "description": "Open-source Figma alternative with BYOAI — design apps visually, export real code",
+  "description": "Open-source build orchestration platform — tighter visibility, control, and integration of your builds at scale",
   "license": "MIT",
   "repository": {
     "type": "git",
