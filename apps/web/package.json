@@ -14,6 +14,7 @@
     "@design-studio/ai": "workspace:*",
     "@design-studio/app": "workspace:*",
     "@design-studio/canvas": "workspace:*",
+    "@design-studio/interactions": "workspace:*",
     "@design-studio/collab": "workspace:*",
     "@design-studio/components": "workspace:*",
     "@design-studio/db": "workspace:*",

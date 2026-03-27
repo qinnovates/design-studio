@@ -10,6 +10,8 @@ import { NodeRenderer } from './NodeRenderer';
 import { SelectionOverlay } from './SelectionOverlay';
 import { AnnotationLayer } from './AnnotationLayer';
 import { GridLayer } from './GridLayer';
+import { TransitionOverlay } from './TransitionOverlay';
+import { CommentBadgeLayer } from '../comments/CommentBadgeLayer';
 import { useUIStore } from '@/stores/uiStore';
 
 export function DesignCanvas() {
@@ -26,7 +28,7 @@ export function DesignCanvas() {
     setDragging,
     addNodeToScene,
   } = useCanvasStore();
-  const { showGrid, showAnnotations, previewWidth } = useUIStore();
+  const { showGrid, showAnnotations, showCommentBadges, showTransitionOverlay, previewWidth } = useUIStore();
 
   // Handle zoom with wheel
   const handleWheel = useCallback(
@@ -215,6 +217,20 @@ export function DesignCanvas() {
             <AnnotationLayer />
           </Layer>
         )}
+
+        {/* Transition overlay — shows which nodes have interactions */}
+        <TransitionOverlay sceneGraph={sceneGraph} visible={showTransitionOverlay} />
+
+        {/* Comment badges — shows comment count on nodes */}
+        <CommentBadgeLayer
+          sceneGraph={sceneGraph}
+          visible={showCommentBadges}
+          onBadgeClick={(nodeId) => {
+            selectNodes([nodeId], false);
+            // Open comments panel
+            useUIStore.getState().setRightPanel('comments');
+          }}
+        />
       </Stage>
     </div>
   );

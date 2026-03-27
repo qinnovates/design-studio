@@ -3,10 +3,10 @@ import { immer } from 'zustand/middleware/immer';
 
 // ─── Types ───────────────────────────────────────────────────
 
-export type LeftPanel = 'components' | 'layers' | 'screens' | 'app-map' | 'notes' | null;
-export type RightPanel = 'inspector' | 'tokens' | 'ai' | 'comments' | 'fonts' | 'export' | 'a11y' | 'versions' | 'plugins' | 'market-intel' | 'brand-brief' | 'features' | 'guardrails' | 'brand-intel' | null;
+export type LeftPanel = 'components' | 'layers' | 'screens' | 'app-map' | 'notes' | 'state-machines' | null;
+export type RightPanel = 'inspector' | 'tokens' | 'ai' | 'comments' | 'fonts' | 'export' | 'a11y' | 'versions' | 'plugins' | 'market-intel' | 'brand-brief' | 'features' | 'guardrails' | 'brand-intel' | 'comments-doc' | 'interactions' | null;
 export type PreviewMode = 'desktop' | 'tablet' | 'phone' | null;
-export type EditorView = 'canvas' | 'app-map' | 'command-center' | 'design-arena' | 'feature-board' | 'tokens' | 'export' | 'notes';
+export type EditorView = 'canvas' | 'app-map' | 'command-center' | 'design-arena' | 'feature-board' | 'tokens' | 'export' | 'notes' | 'state-machine' | 'documentation';
 
 interface UIState {
   // Panel visibility
@@ -26,6 +26,8 @@ interface UIState {
   showSnapGuides: boolean;
   showAnnotations: boolean;
   showRulers: boolean;
+  showCommentBadges: boolean;
+  showTransitionOverlay: boolean;
 
   // Theme
   editorTheme: 'light' | 'dark';
@@ -46,6 +48,8 @@ interface UIState {
   toggleSnapGuides: () => void;
   toggleAnnotations: () => void;
   toggleRulers: () => void;
+  toggleCommentBadges: () => void;
+  toggleTransitionOverlay: () => void;
   toggleEditorTheme: () => void;
   openModal: (modalId: string, data?: Record<string, unknown>) => void;
   closeModal: () => void;
@@ -69,6 +73,8 @@ export const useUIStore = create<UIState>()(
     showSnapGuides: true,
     showAnnotations: true,
     showRulers: false,
+    showCommentBadges: true,
+    showTransitionOverlay: false,
     editorTheme: 'light',
     activeModal: null,
     modalData: {},
@@ -89,6 +95,8 @@ export const useUIStore = create<UIState>()(
       // Auto-switch left panel for certain views
       if (view === 'app-map') s.leftPanel = 'screens';
       if (view === 'notes') s.leftPanel = 'notes';
+      if (view === 'state-machine') s.leftPanel = 'state-machines';
+      if (view === 'documentation') s.rightPanel = 'comments-doc';
       if (view === 'canvas') s.leftPanel = s.leftPanel === 'screens' ? 'components' : s.leftPanel;
     }),
 
@@ -102,6 +110,8 @@ export const useUIStore = create<UIState>()(
     toggleSnapGuides: () => set((s) => { s.showSnapGuides = !s.showSnapGuides; }),
     toggleAnnotations: () => set((s) => { s.showAnnotations = !s.showAnnotations; }),
     toggleRulers: () => set((s) => { s.showRulers = !s.showRulers; }),
+    toggleCommentBadges: () => set((s) => { s.showCommentBadges = !s.showCommentBadges; }),
+    toggleTransitionOverlay: () => set((s) => { s.showTransitionOverlay = !s.showTransitionOverlay; }),
 
     toggleEditorTheme: () => set((s) => {
       s.editorTheme = s.editorTheme === 'light' ? 'dark' : 'light';

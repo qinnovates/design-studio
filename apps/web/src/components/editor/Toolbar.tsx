@@ -5,6 +5,7 @@ import { useCanvasStore } from '@/stores/canvasStore';
 import { useTokenStore } from '@/stores/tokenStore';
 import { PresenceBar } from './PresenceBar';
 import { useUIStore } from '@/stores/uiStore';
+import { useCommentStore } from '@/stores/commentStore';
 
 export function Toolbar() {
   const manifest = useProjectStore((s) => s.manifest);
@@ -23,7 +24,15 @@ export function Toolbar() {
     toggleAnnotations,
     showA11yOverlay,
     toggleA11yOverlay,
+    showCommentBadges,
+    toggleCommentBadges,
+    showTransitionOverlay,
+    toggleTransitionOverlay,
+    activeView,
+    setActiveView,
   } = useUIStore();
+  const { isCommentMode, toggleCommentMode, getOpenCount } = useCommentStore();
+  const openComments = getOpenCount();
 
   const isDark = activeSetId === 'default-dark';
 
@@ -77,6 +86,17 @@ export function Toolbar() {
         <button onClick={toggleAnnotations} className={`text-xs px-2 py-1.5 rounded ${showAnnotations ? 'bg-gray-200' : 'hover:bg-gray-100'}`} aria-pressed={showAnnotations}>Notes</button>
         <button onClick={toggleA11yOverlay} className={`text-xs px-2 py-1.5 rounded ${showA11yOverlay ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-100'}`} aria-pressed={showA11yOverlay}>A11y</button>
         <button onClick={handleAddAnnotation} className="text-xs px-2 py-1.5 rounded hover:bg-gray-100" aria-label="Add annotation">+ Note</button>
+
+        <div className="w-px h-5 bg-gray-200 mx-1" />
+
+        {/* Interactions / Comments / Docs */}
+        <button onClick={() => setActiveView(activeView === 'state-machine' ? 'canvas' : 'state-machine')} className={`text-xs px-2.5 py-1.5 rounded ${activeView === 'state-machine' ? 'bg-purple-100 text-purple-700' : 'hover:bg-gray-100'}`} aria-pressed={activeView === 'state-machine'}>Interactions</button>
+        <button onClick={toggleCommentMode} className={`text-xs px-2.5 py-1.5 rounded ${isCommentMode ? 'bg-orange-100 text-orange-700' : 'hover:bg-gray-100'}`} aria-pressed={isCommentMode}>
+          Comments{openComments > 0 ? ` (${openComments})` : ''}
+        </button>
+        <button onClick={toggleCommentBadges} className={`text-xs px-2 py-1.5 rounded ${showCommentBadges ? 'bg-gray-200' : 'hover:bg-gray-100'}`} aria-pressed={showCommentBadges}>Badges</button>
+        <button onClick={toggleTransitionOverlay} className={`text-xs px-2 py-1.5 rounded ${showTransitionOverlay ? 'bg-purple-100 text-purple-700' : 'hover:bg-gray-100'}`} aria-pressed={showTransitionOverlay}>Flows</button>
+        <button onClick={() => setActiveView(activeView === 'documentation' ? 'canvas' : 'documentation')} className={`text-xs px-2.5 py-1.5 rounded ${activeView === 'documentation' ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-100'}`} aria-pressed={activeView === 'documentation'}>Docs</button>
       </div>
 
       {/* Right — theme + actions */}

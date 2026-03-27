@@ -25,6 +25,9 @@ import { FeatureTracker } from '@/components/editor/FeatureTracker';
 import { FeatureBoard } from '@/components/editor/FeatureBoard';
 import { GuardrailsPanel } from '@/components/editor/GuardrailsPanel';
 import { BrandIntelPanel } from '@/components/editor/BrandIntelPanel';
+import { CommentPanel } from '@/components/editor/comments/CommentPanel';
+import { DocumentationPanel } from '@/components/editor/documentation/DocumentationPanel';
+import { StateMachineSidebar } from '@/components/editor/interactions/StateMachineSidebar';
 import { useProjectStore } from '@/stores/projectStore';
 import { useCanvasStore } from '@/stores/canvasStore';
 import { useTokenStore } from '@/stores/tokenStore';
@@ -37,6 +40,14 @@ const DesignCanvas = dynamic(
   () =>
     import('@/components/editor/canvas/DesignCanvas').then((mod) => ({
       default: mod.DesignCanvas,
+    })),
+  { ssr: false, loading: () => <CanvasPlaceholder /> },
+);
+
+const StateMachineEditor = dynamic(
+  () =>
+    import('@/components/editor/interactions/StateMachineEditor').then((mod) => ({
+      default: mod.StateMachineEditor,
     })),
   { ssr: false, loading: () => <CanvasPlaceholder /> },
 );
@@ -123,6 +134,12 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
         return <ScreenList onClose={() => setLeftPanel(null)} />;
       case 'notes':
         return <NotesPanel onClose={() => setLeftPanel(null)} />;
+      case 'state-machines':
+        return (
+          <div className="w-64 border-r bg-white flex flex-col">
+            <StateMachineSidebar screenId={useProjectStore.getState().activeScreenId ?? 'default'} />
+          </div>
+        );
       default:
         return null;
     }
@@ -159,6 +176,11 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
         return <GuardrailsPanel onClose={() => setRightPanel(null)} />;
       case 'brand-intel':
         return <BrandIntelPanel onClose={() => setRightPanel(null)} />;
+      case 'comments':
+        return <CommentPanel screenId={useProjectStore.getState().activeScreenId ?? 'default'} />;
+      case 'comments-doc':
+      case 'interactions':
+        return null; // Handled by main content area views
       default:
         return null;
     }
@@ -175,6 +197,30 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
         return <DesignArena />;
       case 'feature-board':
         return <FeatureBoard />;
+      case 'state-machine':
+        return <StateMachineEditor screenId={useProjectStore.getState().activeScreenId ?? 'default'} />;
+      case 'documentation': {
+        const currentManifest = useProjectStore.getState().manifest;
+        const screenNames: Record<string, string> = {};
+        const nodeNames: Record<string, { name: string; type: string }> = {};
+        if (currentManifest) {
+          for (const s of Object.values(currentManifest.screens)) {
+            screenNames[s.id] = s.name;
+          }
+        }
+        const sceneGraph = useCanvasStore.getState().sceneGraph;
+        for (const [id, node] of Object.entries(sceneGraph.nodes)) {
+          nodeNames[id] = { name: node.name, type: node.type };
+        }
+        return (
+          <DocumentationPanel
+            projectId={projectId}
+            projectName={currentManifest?.name ?? 'Untitled'}
+            screenNames={screenNames}
+            nodeNames={nodeNames}
+          />
+        );
+      }
       case 'canvas':
       default:
         return (
@@ -207,6 +253,8 @@ export default function EditorPage({ params }: { params: Promise<{ projectId: st
               { id: 'command-center' as const, label: 'Command Center' },
               { id: 'design-arena' as const, label: 'Design Arena' },
               { id: 'feature-board' as const, label: 'Feature Board' },
+              { id: 'state-machine' as const, label: 'Interactions' },
+              { id: 'documentation' as const, label: 'Docs' },
             ].map((view) => (
               <button
                 key={view.id}
